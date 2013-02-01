@@ -45,10 +45,10 @@ public class WindowBuilder extends JFrame implements ActionListener{
 		
 		//create game board
 		JPanel boardMain = new JPanel();
-		boardMain.setBorder(new TitledBorder("Jogador"));
-		boardMain.setLayout(new GridLayout(10, 10, 0, 0));
+		boardMain.setBorder(new TitledBorder("Seu jogo"));
+		boardMain.setLayout(new GridLayout(15, 15, 0, 0));
 		
-		Square[][] square = new Square[10][10];
+		Square[][] square = new Square[15][15];
 		
 		for (int row = 0; row < square.length; row++) {
 			for (int column = 0; column < square[row].length; column++) {
@@ -59,10 +59,10 @@ public class WindowBuilder extends JFrame implements ActionListener{
 		}
 		
 		JPanel boardSecondary = new JPanel();
-		boardSecondary.setBorder(new TitledBorder("Adiversário"));
-		boardSecondary.setLayout(new GridLayout(10, 10, 0, 0));
+		boardSecondary.setBorder(new TitledBorder("Jogo do Adversário"));
+		boardSecondary.setLayout(new GridLayout(15, 15, 0, 0));
 		
-		Square[][] squareSecondary = new Square[10][10];
+		Square[][] squareSecondary = new Square[15][15];
 		
 		for (int row = 0; row < squareSecondary.length; row++) {
 			for (int column = 0; column < squareSecondary[row].length; column++) {
@@ -127,7 +127,7 @@ public class WindowBuilder extends JFrame implements ActionListener{
 		setJMenuBar(menu);
 		add(mainPanel, BorderLayout.NORTH);
 		add(panelChat, BorderLayout.CENTER);
-		setSize(460, 550);
+		setSize(600, 600);
 		setTitle("Battleship - by Marcus Pimenta");
 		
 		setBackground(Color.BLACK);

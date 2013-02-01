@@ -51,13 +51,13 @@ public class Square extends JPanel{
 	
 	@Override
 	public Dimension getPreferredSize(){
-		return new Dimension(20, 20);
+		return new Dimension(17, 17);
 	}
 
 	@Override
 	public void paintComponent(Graphics g){
 		super.paintComponents(g);
 		g.setColor(Color.BLACK);
-		g.drawRect(0, 0, 19, 19);
+		g.drawRect(0, 0, 16, 16);
 	}
 }
