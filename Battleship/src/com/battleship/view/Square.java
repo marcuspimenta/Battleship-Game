@@ -18,11 +18,15 @@ public class Square extends JPanel{
 	private int row;
 	private int column;
 	private Color squareColor;
+	private boolean fill;
+	private boolean show;
 	
-	public Square(int row, int column, Color squareColor){
+	public Square(int row, int column, Color squareColor, boolean fill, boolean show){
 		this.row = row;
 		this.column = column;
 		this.squareColor = squareColor;
+		this.fill = fill;
+		this.show = show;
 	}
 	
 	public int getRow() {
@@ -57,7 +61,17 @@ public class Square extends JPanel{
 	@Override
 	public void paintComponent(Graphics g){
 		super.paintComponents(g);
-		g.setColor(Color.BLACK);
-		g.drawRect(0, 0, 16, 16);
+		
+		if(show){
+			if(fill){
+				g.setColor(Color.WHITE);
+				g.drawRect(0, 0, 16, 16);
+				g.setColor(squareColor);
+				g.fillRect(1, 1, 15, 15);
+			}else{
+				g.setColor(squareColor);
+				g.drawRect(0, 0, 16, 16);
+			}
+		}
 	}
 }

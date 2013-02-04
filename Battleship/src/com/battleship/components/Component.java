@@ -6,19 +6,8 @@ package com.battleship.components;
  * @email mvinicius.pimenta@gmail.com
  * @date 21:18:43 30/01/2013
  */
-public class Component {
+public interface Component {
 	
-	private int length;
-	
-	public Component(int length){
-		this.length = length;
-	}
+	public abstract boolean[][] getArea();
 
-	public int getLength() {
-		return length;
-	}
-
-	public void setLength(int length) {
-		this.length = length;
-	}
 }

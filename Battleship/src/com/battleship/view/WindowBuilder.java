@@ -22,6 +22,12 @@ import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.border.TitledBorder;
 
+import com.battleship.components.Aircraftcarrier;
+import com.battleship.components.Battleship;
+import com.battleship.components.Cruiser;
+import com.battleship.components.Seaplane;
+import com.battleship.components.Submarine;
+
 
 /**
  * 
@@ -34,45 +40,36 @@ public class WindowBuilder extends JFrame implements ActionListener{
 
 	private Container c;
 	
+	private Square[][] squareSecondary;
+	
+	private Board board;
+	
 	private JButton send;
 	private JTextArea message;
 	private JTextArea displayAreaMsg;
-	private JMenuItem menuAbout, menuExit;
-		
+	private JMenuItem menuAbout, menuExit, menutServer, menuClient;
+	
 	public void printTabuleiro(){
 		
 		c = getContentPane();
 		
-		//create game board
-		JPanel boardMain = new JPanel();
-		boardMain.setBorder(new TitledBorder("Seu jogo"));
-		boardMain.setLayout(new GridLayout(15, 15, 0, 0));
-		
-		Square[][] square = new Square[15][15];
-		
-		for (int row = 0; row < square.length; row++) {
-			for (int column = 0; column < square[row].length; column++) {
-				square[row][column] = new Square(row, column, Color.WHITE);
-				square[row][column].addMouseListener(mouseAdapter);
-				boardMain.add(square[row][column]);
-			}
-		}
+		board = new Board();
 		
 		JPanel boardSecondary = new JPanel();
 		boardSecondary.setBorder(new TitledBorder("Jogo do Adversário"));
 		boardSecondary.setLayout(new GridLayout(15, 15, 0, 0));
 		
-		Square[][] squareSecondary = new Square[15][15];
+		squareSecondary = new Square[15][15];
 		
 		for (int row = 0; row < squareSecondary.length; row++) {
 			for (int column = 0; column < squareSecondary[row].length; column++) {
-				squareSecondary[row][column] = new Square(row, column, Color.WHITE);
+				squareSecondary[row][column] = new Square(row, column, Color.BLACK, false, true);
 				squareSecondary[row][column].addMouseListener(mouseAdapter);
 				boardSecondary.add(squareSecondary[row][column]);
 			}
 		}
 		
-		displayAreaMsg = new JTextArea(10, 30);
+		displayAreaMsg = new JTextArea(8, 30);
 		displayAreaMsg.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.black));
 		displayAreaMsg.setLineWrap(true);
 		displayAreaMsg.setEditable(false);
@@ -93,26 +90,31 @@ public class WindowBuilder extends JFrame implements ActionListener{
 		panelTextButton.add(message, BorderLayout.WEST);
 		panelTextButton.add(send, BorderLayout.EAST);
 		
+		JPanel panel = new JPanel();
+		panel.setBorder(new TitledBorder("Armas"));
+		panel.setLayout(new GridLayout(3, 2));
+		panel.add(showPiecesGame("Hidroavião", 2, 5, (new Seaplane()).getArea()));
+		panel.add(showPiecesGame("Submarino", 2, 5, (new Submarine()).getArea()));
+		panel.add(showPiecesGame("Cruzador", 2, 5, (new Cruiser()).getArea()));
+		panel.add(showPiecesGame("Encouraçado", 2, 5, (new Battleship()).getArea()));
+		panel.add(showPiecesGame("Porta-avião", 2, 5, (new Aircraftcarrier()).getArea()));
+		
 		JPanel panelChat = new JPanel();
-		//panelChat.setLayout(new BorderLayout());
 		panelChat.add(scrollpane, BorderLayout.CENTER);
 		panelChat.add(panelTextButton, BorderLayout.SOUTH);
 		panelChat.setBorder(new TitledBorder("Chat"));
 		
 		JPanel mainPanel = new JPanel();
-		mainPanel.add(boardMain, BorderLayout.CENTER);
+		mainPanel.add(board.paintBoard(), BorderLayout.CENTER);
 		mainPanel.add(boardSecondary, BorderLayout.CENTER);
 		mainPanel.setBorder(new TitledBorder("Jogadores"));
 		
 		JMenu optionMenu = new JMenu("Opções");
 		
-		JMenuItem menutServer = new JMenuItem("Iniciar como servidor");
-		
-		JMenuItem menuClient = new JMenuItem("Iniciar como cliente");
-		
+		menutServer = new JMenuItem("Iniciar como servidor");
+		menuClient = new JMenuItem("Iniciar como cliente");
 		menuAbout = new JMenuItem("Sobre");
 		menuAbout.addActionListener(this);
-		
 		menuExit = new JMenuItem("Sair");
 		menuExit.addActionListener(this);
 		
@@ -127,7 +129,8 @@ public class WindowBuilder extends JFrame implements ActionListener{
 		setJMenuBar(menu);
 		add(mainPanel, BorderLayout.NORTH);
 		add(panelChat, BorderLayout.CENTER);
-		setSize(600, 600);
+		add(panel, BorderLayout.WEST);
+		setSize(600, 575);
 		setTitle("Battleship - by Marcus Pimenta");
 		
 		setBackground(Color.BLACK);
@@ -135,6 +138,27 @@ public class WindowBuilder extends JFrame implements ActionListener{
 		setLocationRelativeTo(null);
 		setResizable(false);
 		setVisible(true);
+	}
+	
+	public JPanel showPiecesGame(String title, int rows, int cols, boolean[][] paint){
+		JPanel panel = new JPanel();
+		panel.setBorder(new TitledBorder(title));
+		panel.setLayout(new GridLayout(rows, cols));
+		
+		Square[][] square = new Square[rows][cols];
+		
+		for (int row = 0; row < square.length; row++) {
+			for (int column = 0; column < square[row].length; column++) {
+				if(paint != null){
+					square[row][column] = new Square(row, column, Color.BLACK, paint[row][column], paint[row][column]);
+				}else{
+					square[row][column] = new Square(row, column, Color.BLACK, false, false);
+				}
+				panel.add(square[row][column]);
+			}
+		}
+		
+		return panel;
 	}
 	
 	@Override
@@ -162,6 +186,7 @@ public class WindowBuilder extends JFrame implements ActionListener{
 		
 		public void mouseReleased(MouseEvent e){
 			Square square = (Square)(e.getSource());
+			
 			System.out.println("(x,y) - (" + square.getColumn() + "," + square.getRow() + ")");
 		}
 		
