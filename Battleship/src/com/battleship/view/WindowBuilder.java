@@ -47,7 +47,7 @@ public class WindowBuilder extends JFrame implements ActionListener{
 	private JButton send;
 	private JTextArea message;
 	private JTextArea displayAreaMsg;
-	private JMenuItem menuAbout, menuExit, menutServer, menuClient;
+	private JMenuItem menuAbout, menuExit, menuServer, menuClient, menuRepaint;
 	
 	public void printTabuleiro(){
 		
@@ -111,15 +111,20 @@ public class WindowBuilder extends JFrame implements ActionListener{
 		
 		JMenu optionMenu = new JMenu("Opções");
 		
-		menutServer = new JMenuItem("Iniciar como servidor");
+		menuServer = new JMenuItem("Iniciar como servidor");
+		menuServer.addActionListener(this);
 		menuClient = new JMenuItem("Iniciar como cliente");
+		menuClient.addActionListener(this);
+		menuRepaint = new JMenuItem("Novo tabuleiro");
+		menuRepaint.addActionListener(this);
 		menuAbout = new JMenuItem("Sobre");
 		menuAbout.addActionListener(this);
 		menuExit = new JMenuItem("Sair");
 		menuExit.addActionListener(this);
 		
-		optionMenu.add(menutServer);
+		optionMenu.add(menuServer);
 		optionMenu.add(menuClient);
+		optionMenu.add(menuRepaint);
 		optionMenu.add(menuAbout);
 		optionMenu.add(menuExit);
 
@@ -163,7 +168,7 @@ public class WindowBuilder extends JFrame implements ActionListener{
 	
 	@Override
 	public void actionPerformed(ActionEvent event) {
-		if(event.getSource() == message){
+		if(event.getSource() == send){
 			if(message.getText().length() > 0){
 				if(event.getSource().equals(send)){
 					displayAreaMsg.append( message.getText() +"\n");
@@ -179,6 +184,15 @@ public class WindowBuilder extends JFrame implements ActionListener{
 					"Sobre BattleShip", JOptionPane.PLAIN_MESSAGE);
 		}else if(event.getSource() == menuExit){
 			System.exit(0);
+		}else if(event.getSource() == menuRepaint){
+			board.repaintBoard();
+		}else if(event.getSource() == menuClient){
+			JOptionPane.showInputDialog(c.getParent(),
+										"Digite o host do servidor:", "Configuração do host do servidor",
+										JOptionPane.QUESTION_MESSAGE);
+		
+		}else if(event.getSource() == menuServer){
+			
 		}
 	}
 	

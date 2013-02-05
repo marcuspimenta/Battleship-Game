@@ -53,6 +53,22 @@ public class Square extends JPanel{
 		this.squareColor = squareColor;
 	}
 	
+	public boolean isFill() {
+		return fill;
+	}
+
+	public void setFill(boolean fill) {
+		this.fill = fill;
+	}
+
+	public boolean isShow() {
+		return show;
+	}
+
+	public void setShow(boolean show) {
+		this.show = show;
+	}
+
 	@Override
 	public Dimension getPreferredSize(){
 		return new Dimension(17, 17);

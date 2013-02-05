@@ -23,6 +23,8 @@ import com.battleship.components.Submarine;
  */
 public class Board {
 	
+	private Square[][] square;
+	
 	private boolean area[][] = { {false, false, false, false, false, false, false, false, false, false, false, false, false, false, false},
 								 {false, false, false, false, false, false, false, false, false, false, false, false, false, false, false},
 								 {false, false, false, false, false, false, false, false, false, false, false, false, false, false, false},
@@ -46,7 +48,7 @@ public class Board {
 		
 		shufflingPieces();
 		
-		Square[][] square = new Square[15][15];
+		square = new Square[15][15];
 		
 		for (int row = 0; row < square.length; row++) {
 			for (int column = 0; column < square[row].length; column++) {
@@ -56,6 +58,18 @@ public class Board {
 		}
 		
 		return board;
+	}
+	
+	public void repaintBoard(){
+		resetBoard();
+		shufflingPieces();
+		
+		for (int row = 0; row < square.length; row++) {
+			for (int column = 0; column < square[row].length; column++) {
+				square[row][column].setFill(area[row][column]);
+				square[row][column].repaint();
+			}
+		}
 	}
 	
 	public void shufflingPieces(){
@@ -108,6 +122,14 @@ public class Board {
 		for (int x = row, a = 0; x < row + 3; x++, a++) {
 			for (int y = column, b = 0; y < column + 5; y++, b++) {
 				area[x][y] = component.getArea()[a][b];
+			}
+		}
+	}
+	
+	public void resetBoard(){
+		for (int row = 0; row < area.length; row++) {
+			for (int column = 0; column < area[row].length; column++) {
+				area[row][column] = false;
 			}
 		}
 	}
