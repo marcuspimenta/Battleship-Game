@@ -8,7 +8,8 @@ package com.battleship.components;
  */
 public class Aircraftcarrier implements Component{
 	
-	private boolean[][] aircraftcarrier = {{true, true, true, true, true},
+	private boolean[][] aircraftcarrier = {{false, false, false, false, false},
+										   {true, true, true, true, true},
             							   {false, false, false, false, false}};
 
 	@Override

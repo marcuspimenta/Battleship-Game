@@ -8,7 +8,8 @@ package com.battleship.components;
  */
 public class Cruiser implements Component{
 
-	private boolean[][] cruiser = {{false, true, true, false, false},
+	private boolean[][] cruiser = {{false, false, false, false, false},
+								   {false, true, true, false, false},
 		     					   {false, false, false, false, false}};
 	
 	@Override

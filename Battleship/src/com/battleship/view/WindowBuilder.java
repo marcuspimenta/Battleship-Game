@@ -69,7 +69,7 @@ public class WindowBuilder extends JFrame implements ActionListener{
 			}
 		}
 		
-		displayAreaMsg = new JTextArea(8, 30);
+		displayAreaMsg = new JTextArea(10, 30);
 		displayAreaMsg.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.black));
 		displayAreaMsg.setLineWrap(true);
 		displayAreaMsg.setEditable(false);
@@ -93,11 +93,11 @@ public class WindowBuilder extends JFrame implements ActionListener{
 		JPanel panel = new JPanel();
 		panel.setBorder(new TitledBorder("Armas"));
 		panel.setLayout(new GridLayout(3, 2));
-		panel.add(showPiecesGame("Hidroavião", 2, 5, (new Seaplane()).getArea()));
-		panel.add(showPiecesGame("Submarino", 2, 5, (new Submarine()).getArea()));
-		panel.add(showPiecesGame("Cruzador", 2, 5, (new Cruiser()).getArea()));
-		panel.add(showPiecesGame("Encouraçado", 2, 5, (new Battleship()).getArea()));
-		panel.add(showPiecesGame("Porta-avião", 2, 5, (new Aircraftcarrier()).getArea()));
+		panel.add(showPiecesGame("Hidroavião", 3, 5, (new Seaplane()).getArea()));
+		panel.add(showPiecesGame("Submarino", 3, 5, (new Submarine()).getArea()));
+		panel.add(showPiecesGame("Cruzador", 3, 5, (new Cruiser()).getArea()));
+		panel.add(showPiecesGame("Encouraçado", 3, 5, (new Battleship()).getArea()));
+		panel.add(showPiecesGame("Porta-avião", 3, 5, (new Aircraftcarrier()).getArea()));
 		
 		JPanel panelChat = new JPanel();
 		panelChat.add(scrollpane, BorderLayout.CENTER);
@@ -130,7 +130,7 @@ public class WindowBuilder extends JFrame implements ActionListener{
 		add(mainPanel, BorderLayout.NORTH);
 		add(panelChat, BorderLayout.CENTER);
 		add(panel, BorderLayout.WEST);
-		setSize(600, 575);
+		setSize(600, 600);
 		setTitle("Battleship - by Marcus Pimenta");
 		
 		setBackground(Color.BLACK);
