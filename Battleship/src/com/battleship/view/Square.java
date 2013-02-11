@@ -80,12 +80,12 @@ public class Square extends JPanel{
 		
 		if(show){
 			if(fill){
-				g.setColor(Color.WHITE);
+				g.setColor(Color.BLACK);
 				g.drawRect(0, 0, 16, 16);
 				g.setColor(squareColor);
-				g.fillRect(1, 1, 15, 15);
+				g.fillRect(2, 2, 13, 13);
 			}else{
-				g.setColor(squareColor);
+				g.setColor(Color.BLACK);
 				g.drawRect(0, 0, 16, 16);
 			}
 		}

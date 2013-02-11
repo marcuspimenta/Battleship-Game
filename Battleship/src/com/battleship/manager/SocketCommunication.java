@@ -13,6 +13,8 @@ import java.io.IOException;
  */
 public class SocketCommunication extends Thread {
 	
+	private boolean run;
+	
 	private Socket socket;
 	private SocketCallback socketCallback;
 
@@ -22,6 +24,8 @@ public class SocketCommunication extends Thread {
 	public SocketCommunication(Socket socket, SocketCallback socketCallback){
 		this.socket = socket;
 		this.socketCallback = socketCallback;
+		
+		run = true;
 	}
 	
 	@Override
@@ -32,9 +36,9 @@ public class SocketCommunication extends Thread {
 			 dataInputStream = new DataInputStream(socket.getInputStream());
 			 dataOutputStream = new DataOutputStream(socket.getOutputStream());
 			
-			 System.out.println("Conexao realizada com sucesso");
+			 socketCallback.onPrintMsgConsole("Conexao realizada com sucesso");
 			 
-			 while (true) {
+			 while (run) {
 				 if(dataInputStream.available() > 0){
 					 byte[] msg = new byte[dataInputStream.available()];
 					 dataInputStream.read(msg, 0, dataInputStream.available());
@@ -48,7 +52,7 @@ public class SocketCommunication extends Thread {
 			 dataInputStream = null;
 			 dataOutputStream = null;
 			 
-			 System.out.println("Conexao perdida");
+			 socketCallback.onPrintMsgConsole("Conexao perdida");
 		 }
 	}
 	
@@ -58,18 +62,20 @@ public class SocketCommunication extends Thread {
 				dataOutputStream.write(msg.getBytes());
 				dataOutputStream.flush();
 			}else{
-				System.out.println("Sem conexao");
+				socketCallback.onPrintMsgConsole("Sem conexao");
 			}
 			
 		} catch (IOException e) {
 			e.printStackTrace(); 
 			 
-			System.out.println("Falha no envio da mensagem");
+			socketCallback.onPrintMsgConsole("Falha no envio da mensagem");
 		}
 	}
 	
 	 public void stopComunication(){ 
 		try {
+			run = false;
+			
 			if(dataInputStream != null && dataOutputStream != null){
 				dataInputStream.close();
 				dataOutputStream.close();

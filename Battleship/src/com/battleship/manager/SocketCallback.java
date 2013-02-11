@@ -1,5 +1,8 @@
 package com.battleship.manager;
 
+import com.battleship.business.Action;
+
+
 /**
  * 
  * @author Marcus Pimenta
@@ -10,4 +13,7 @@ public interface SocketCallback {
 
 	void onSocketReceiverMsg(byte[] msg);
 	
+	void onPrintMsgConsole(String msg);
+	
+	void onAction(Action action);
 }

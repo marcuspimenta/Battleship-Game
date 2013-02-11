@@ -12,7 +12,7 @@ import java.net.UnknownHostException;
  */
 public class SocketClient { 
 	
-	private final int PORT = 92;
+	private final int PORT = 96;
 	
 	private Socket socket;
 	private SocketCommunication communication;
@@ -35,8 +35,13 @@ public class SocketClient {
 	
 	public void stopClient(){
         try{
-        	communication.stopComunication();
-	        socket.close();
+        	if(communication != null){
+        		communication.stopComunication();
+        	}
+        	
+        	if(socket != null){
+        		socket.close();
+        	}
         }
         catch (IOException e) {
 			e.printStackTrace();

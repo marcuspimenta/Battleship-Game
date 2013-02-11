@@ -1,6 +1,6 @@
 package com.battleship.main;
 
-import com.battleship.view.WindowBuilder;
+import com.battleship.business.BusinessLogic;
 
 
 /**
@@ -12,9 +12,9 @@ import com.battleship.view.WindowBuilder;
 public class Main {
 
 	public static void main(String[] args) {
-		
-		WindowBuilder tab = new WindowBuilder();
-		tab.printTabuleiro();
+
+		BusinessLogic businessLogic = new BusinessLogic();
+		businessLogic.showWindow();
 	}
 	
 }

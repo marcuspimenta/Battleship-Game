@@ -12,15 +12,15 @@ import java.net.Socket;
  */
 public class SocketServer {
 	
-	private final int PORT = 100;
+	private final int PORT = 96;
 	
-	private Socket socket;
 	private ServerSocket server;
+	private Socket socket;
 	private SocketCommunication communication;
 	
 	public void startServer(SocketCallback socketCallback){
 		try {
-			ServerSocket server = new ServerSocket(PORT);
+			server = new ServerSocket(PORT);
 			socket = server.accept();
 			
 			communication = new SocketCommunication(socket, socketCallback);
@@ -33,10 +33,17 @@ public class SocketServer {
 	
 	public void stopServer(){
         try{
-        	communication.stopComunication();
+        	if(communication != null){
+        		communication.stopComunication();
+        	}
         	
-	        socket.close();
-	        server.close();
+        	if(socket != null){
+        		socket.close();
+        	}
+        	
+        	if(server != null){
+        		server.close();
+        	}
         }
         catch (IOException e) {
 			e.printStackTrace();

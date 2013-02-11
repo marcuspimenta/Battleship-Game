@@ -22,6 +22,8 @@ import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.border.TitledBorder;
 
+import com.battleship.business.Action;
+import com.battleship.business.ActionsCallback;
 import com.battleship.components.Aircraftcarrier;
 import com.battleship.components.Battleship;
 import com.battleship.components.Cruiser;
@@ -39,15 +41,22 @@ import com.battleship.components.Submarine;
 public class WindowBuilder extends JFrame implements ActionListener{
 
 	private Container c;
-	
 	private Square[][] squareSecondary;
 	
 	private Board board;
-	
 	private JButton send;
 	private JTextArea message;
 	private JTextArea displayAreaMsg;
-	private JMenuItem menuAbout, menuExit, menuServer, menuClient, menuRepaint;
+	private JMenuItem menuAbout, menuExit, menuServer, menuClient, menuRepaint, menuQuiGame;
+	
+	private ActionsCallback actionsCallback;
+
+	public static String host = "localhost";
+	
+	
+	public WindowBuilder(ActionsCallback actionsCallback){
+		this.actionsCallback = actionsCallback;
+	}
 	
 	public void printTabuleiro(){
 		
@@ -113,17 +122,25 @@ public class WindowBuilder extends JFrame implements ActionListener{
 		
 		menuServer = new JMenuItem("Iniciar como servidor");
 		menuServer.addActionListener(this);
+		
 		menuClient = new JMenuItem("Iniciar como cliente");
 		menuClient.addActionListener(this);
+		
+		menuQuiGame = new JMenuItem("Abandonar jogo");
+		menuQuiGame.addActionListener(this);
+		
 		menuRepaint = new JMenuItem("Novo tabuleiro");
 		menuRepaint.addActionListener(this);
+		
 		menuAbout = new JMenuItem("Sobre");
 		menuAbout.addActionListener(this);
+		
 		menuExit = new JMenuItem("Sair");
 		menuExit.addActionListener(this);
 		
 		optionMenu.add(menuServer);
 		optionMenu.add(menuClient);
+		optionMenu.add(menuQuiGame);
 		optionMenu.add(menuRepaint);
 		optionMenu.add(menuAbout);
 		optionMenu.add(menuExit);
@@ -135,7 +152,7 @@ public class WindowBuilder extends JFrame implements ActionListener{
 		add(mainPanel, BorderLayout.NORTH);
 		add(panelChat, BorderLayout.CENTER);
 		add(panel, BorderLayout.WEST);
-		setSize(600, 600);
+		setSize(600, 630);
 		setTitle("Battleship - by Marcus Pimenta");
 		
 		setBackground(Color.BLACK);
@@ -143,6 +160,8 @@ public class WindowBuilder extends JFrame implements ActionListener{
 		setLocationRelativeTo(null);
 		setResizable(false);
 		setVisible(true);
+		
+		confEnableButtonsMenu(true);
 	}
 	
 	public JPanel showPiecesGame(String title, int rows, int cols, boolean[][] paint){
@@ -171,10 +190,13 @@ public class WindowBuilder extends JFrame implements ActionListener{
 		if(event.getSource() == send){
 			if(message.getText().length() > 0){
 				if(event.getSource().equals(send)){
-					displayAreaMsg.append( message.getText() +"\n");
+					displayAreaMsg.append("Você: " + message.getText() +"\n");
+		   			actionsCallback.anSendMsg(message.getText());
+
 		   			message.setText("");
 				}
 			}
+			
 		}else if(event.getSource() == menuAbout){
 			JOptionPane.showMessageDialog(c,
 					"BattleShip Game\n\n" +
@@ -182,17 +204,33 @@ public class WindowBuilder extends JFrame implements ActionListener{
 					"email:        mvinicius.pimenta@gmail.com\n" +
 					"Data: 		         jan 31, 2013",
 					"Sobre BattleShip", JOptionPane.PLAIN_MESSAGE);
+			
 		}else if(event.getSource() == menuExit){
+			actionsCallback.onActionSelected(Action.CLOSE_COMMUNICATION);
 			System.exit(0);
+			
 		}else if(event.getSource() == menuRepaint){
 			board.repaintBoard();
-		}else if(event.getSource() == menuClient){
-			JOptionPane.showInputDialog(c.getParent(),
-										"Digite o host do servidor:", "Configuração do host do servidor",
-										JOptionPane.QUESTION_MESSAGE);
-		
-		}else if(event.getSource() == menuServer){
 			
+		}else if(event.getSource() == menuClient){
+			confEnableButtonsMenu(false);
+			
+			host = JOptionPane.showInputDialog(c.getParent(),
+											   "Digite o host do servidor:", "Configuração do host do servidor",
+											   JOptionPane.QUESTION_MESSAGE);
+			
+			actionsCallback.onActionSelected(Action.START_CLIENT);
+			
+		}else if(event.getSource() == menuServer){
+			confEnableButtonsMenu(false);
+			
+			actionsCallback.onActionSelected(Action.START_SERVER);
+			
+		}else if(event.getSource() == menuQuiGame){
+			confEnableButtonsMenu(true);
+			
+			actionsCallback.anSendMsg("Estou abandonando o jogo");
+			actionsCallback.onActionSelected(Action.CLOSE_COMMUNICATION);
 		}
 	}
 	
@@ -205,5 +243,16 @@ public class WindowBuilder extends JFrame implements ActionListener{
 		}
 		
 	};
+	
+	public void printMsgDisplay(String message){
+		displayAreaMsg.append(message +"\n");
+	}
+	
+	public void confEnableButtonsMenu(boolean value){
+		menuClient.setEnabled(value);
+		menuServer.setEnabled(value);
+		menuRepaint.setEnabled(value);
+		menuQuiGame.setEnabled(!value);
+	}
 	
 }
