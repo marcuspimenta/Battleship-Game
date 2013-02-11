@@ -1,3 +1,3 @@
 Battleship-Game
 ===============
-![ScreenShot](https://raw.github.com/marcuspimenta/Battleship-Game/master/battleship_window.png)
+<p align="center"> <img src="battleship_window.png"/> </p>
