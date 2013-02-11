@@ -11,7 +11,7 @@ import com.battleship.business.Action;
  */
 public interface SocketCallback {
 
-	void onSocketReceiverMsg(byte[] msg);
+	void onSocketReceiverMsg(String msg);
 	
 	void onPrintMsgConsole(String msg);
 	

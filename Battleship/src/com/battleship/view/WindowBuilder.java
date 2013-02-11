@@ -51,7 +51,7 @@ public class WindowBuilder extends JFrame implements ActionListener{
 	
 	private ActionsCallback actionsCallback;
 
-	public static String host = "localhost";
+	public static String host;
 	
 	
 	public WindowBuilder(ActionsCallback actionsCallback){
@@ -214,6 +214,7 @@ public class WindowBuilder extends JFrame implements ActionListener{
 			
 		}else if(event.getSource() == menuClient){
 			confEnableButtonsMenu(false);
+			displayAreaMsg.setText("");
 			
 			host = JOptionPane.showInputDialog(c.getParent(),
 											   "Digite o host do servidor:", "Configuração do host do servidor",
@@ -223,12 +224,15 @@ public class WindowBuilder extends JFrame implements ActionListener{
 			
 		}else if(event.getSource() == menuServer){
 			confEnableButtonsMenu(false);
+			displayAreaMsg.setText("");
 			
 			actionsCallback.onActionSelected(Action.START_SERVER);
 			
 		}else if(event.getSource() == menuQuiGame){
 			confEnableButtonsMenu(true);
+			displayAreaMsg.setText("");
 			
+			printMsgDisplay("Partida abandonada");
 			actionsCallback.anSendMsg("Estou abandonando o jogo");
 			actionsCallback.onActionSelected(Action.CLOSE_COMMUNICATION);
 		}

@@ -43,7 +43,7 @@ public class SocketCommunication extends Thread {
 					 byte[] msg = new byte[dataInputStream.available()];
 					 dataInputStream.read(msg, 0, dataInputStream.available());
 					 
-					 socketCallback.onSocketReceiverMsg(msg);
+					 socketCallback.onSocketReceiverMsg(new String(msg));
 				 }
 			 }
 		 } catch (IOException e) {
@@ -51,8 +51,6 @@ public class SocketCommunication extends Thread {
 			 
 			 dataInputStream = null;
 			 dataOutputStream = null;
-			 
-			 socketCallback.onPrintMsgConsole("Conexao perdida");
 		 }
 	}
 	
@@ -68,7 +66,8 @@ public class SocketCommunication extends Thread {
 		} catch (IOException e) {
 			e.printStackTrace(); 
 			 
-			socketCallback.onPrintMsgConsole("Falha no envio da mensagem");
+			socketCallback.onPrintMsgConsole("Falha no envio da mensagem\n" +
+											 "Conexão perdida, abandone a partida e inicie outra\n");
 		}
 	}
 	

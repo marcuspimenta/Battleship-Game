@@ -11,32 +11,29 @@ import java.net.Socket;
  * @date 19:18:05 15/01/2013
  */
 public class SocketServer {
+
+	private final int TIME_OUT = 15000;
 	
-	private final int PORT = 96;
-	
-	private ServerSocket server;
 	private Socket socket;
-	private SocketCommunication communication;
+	private ServerSocket server;
 	
-	public void startServer(SocketCallback socketCallback){
+	public Socket startServer(int port){
 		try {
-			server = new ServerSocket(PORT);
+			server = new ServerSocket(port);
+			server.setSoTimeout(TIME_OUT);
+			
 			socket = server.accept();
 			
-			communication = new SocketCommunication(socket, socketCallback);
-			communication.start();
-			
+			return socket;
 		} catch (IOException e) {
 			e.printStackTrace();
 		} 
+		
+		return null;
 	}
 	
 	public void stopServer(){
         try{
-        	if(communication != null){
-        		communication.stopComunication();
-        	}
-        	
         	if(socket != null){
         		socket.close();
         	}
@@ -49,9 +46,5 @@ public class SocketServer {
 			e.printStackTrace();
 		} 
     }
-
-	public SocketCommunication getCommunication() {
-		return communication;
-	}
 	
 }

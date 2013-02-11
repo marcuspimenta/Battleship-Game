@@ -1,5 +1,7 @@
 package com.battleship.business;
 
+import java.net.Socket;
+
 import com.battleship.manager.SocketCallback;
 import com.battleship.manager.SocketClient;
 import com.battleship.manager.SocketCommunication;
@@ -13,6 +15,8 @@ import com.battleship.view.WindowBuilder;
  * @date 22:47:37 30/01/2013
  */
 public class BusinessLogic {
+	
+	private final int PORT = 97;
 	
 	private SocketServer server;
 	private SocketClient client;
@@ -47,9 +51,10 @@ public class BusinessLogic {
 	};
 	
 	private SocketCallback callback = new SocketCallback() {
+		
 		@Override
-		public void onSocketReceiverMsg(byte[] msg) {
-			windowBuilder.printMsgDisplay("Adversário: " + new String(msg));
+		public void onSocketReceiverMsg(String msg) {
+			windowBuilder.printMsgDisplay("Adversário: " + msg);
 		}
 
 		@Override
@@ -77,20 +82,21 @@ public class BusinessLogic {
 						super.run();
 						
 						server = new SocketServer();
-						server.startServer(callback);
-						communication = server.getCommunication();
+						configCommunication(server.startServer(PORT));
 					}
 				}.start();
 				break;
 				
 			case START_CLIENT:
-				stopCommunication();
-				
-				windowBuilder.printMsgDisplay("Cliente iniciado \n");
-				
-				client = new SocketClient();
-				client.startClient(WindowBuilder.host, callback);
-				communication = client.getCommunication();
+				if(!WindowBuilder.host.equals("")){
+					stopCommunication();
+					windowBuilder.printMsgDisplay("Cliente iniciado \n");
+
+					client = new SocketClient();
+					configCommunication(client.startClient(WindowBuilder.host, PORT));
+				}else{
+					windowBuilder.printMsgDisplay("Digite o valor do host");
+				}
 				break;
 			
 			case CLOSE_COMMUNICATION:
@@ -104,6 +110,11 @@ public class BusinessLogic {
 				windowBuilder.confEnableButtonsMenu(true);
 				break;
 		}
+	}
+
+	public void configCommunication(Socket socket){
+		communication = new SocketCommunication(socket, callback);
+		communication.start();
 	}
 	
 	public void stopCommunication(){

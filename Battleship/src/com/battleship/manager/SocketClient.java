@@ -12,33 +12,25 @@ import java.net.UnknownHostException;
  */
 public class SocketClient { 
 	
-	private final int PORT = 96;
-	
 	private Socket socket;
-	private SocketCommunication communication;
 	
-	public void startClient(String host, SocketCallback socketCallback){
+	public Socket startClient(String host, int port){
 		
 		try {
-			socket = new Socket(host, PORT);
+			socket = new Socket(host, port);
 			
-			if(socket.isConnected()){
-				communication = new SocketCommunication(socket, socketCallback);
-				communication.start();
-			}
+			return socket;
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
-		} 
+		}
+		
+		return null;
 	}
 	
 	public void stopClient(){
         try{
-        	if(communication != null){
-        		communication.stopComunication();
-        	}
-        	
         	if(socket != null){
         		socket.close();
         	}
@@ -47,9 +39,5 @@ public class SocketClient {
 			e.printStackTrace();
 		} 
     }
-	
-	public SocketCommunication getCommunication() {
-		return communication;
-	}
 	 
 }  
