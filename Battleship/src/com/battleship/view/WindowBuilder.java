@@ -47,6 +47,7 @@ public class WindowBuilder extends JFrame implements ActionListener{
 	private JButton send;
 	private JTextArea message;
 	private JTextArea displayAreaMsg;
+	private JScrollPane scrollpane;
 	private JMenuItem menuAbout, menuExit, menuServer, menuClient, menuRepaint, menuQuiGame;
 	
 	private ActionsCallback actionsCallback;
@@ -83,7 +84,7 @@ public class WindowBuilder extends JFrame implements ActionListener{
 		displayAreaMsg.setLineWrap(true);
 		displayAreaMsg.setEditable(false);
 		
-		JScrollPane scrollpane = new JScrollPane(displayAreaMsg);
+		scrollpane = new JScrollPane(displayAreaMsg);
 		scrollpane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		
 		message = new JTextArea(1, 25);
@@ -190,8 +191,8 @@ public class WindowBuilder extends JFrame implements ActionListener{
 		if(event.getSource() == send){
 			if(message.getText().length() > 0){
 				if(event.getSource().equals(send)){
-					displayAreaMsg.append("Você: " + message.getText() +"\n");
-		   			actionsCallback.anSendMsg(message.getText());
+					printMsgDisplay("Você: " + message.getText());
+		   			actionsCallback.onSendMsg(message.getText());
 
 		   			message.setText("");
 				}
@@ -233,7 +234,7 @@ public class WindowBuilder extends JFrame implements ActionListener{
 			displayAreaMsg.setText("");
 			
 			printMsgDisplay("Partida abandonada");
-			actionsCallback.anSendMsg("Estou abandonando o jogo");
+			actionsCallback.onSendMsg("Estou abandonando o jogo");
 			actionsCallback.onActionSelected(Action.CLOSE_COMMUNICATION);
 		}
 	}
@@ -250,6 +251,7 @@ public class WindowBuilder extends JFrame implements ActionListener{
 	
 	public void printMsgDisplay(String message){
 		displayAreaMsg.append(message +"\n");
+		displayAreaMsg.setCaretPosition(displayAreaMsg.getDocument().getLength());
 	}
 	
 	public void confEnableButtonsMenu(boolean value){

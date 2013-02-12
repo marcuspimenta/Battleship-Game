@@ -40,7 +40,7 @@ public class BusinessLogic {
 		}
 
 		@Override
-		public void anSendMsg(String msg) {
+		public void onSendMsg(String msg) {
 			if(communication != null){
 				communication.sendMsg(msg);
 			}else{

@@ -11,6 +11,6 @@ public interface ActionsCallback {
 	
 	void onActionSelected(Action action);
 	
-	void anSendMsg(String msg);
+	void onSendMsg(String msg);
 	
 }
