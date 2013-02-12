@@ -53,71 +53,71 @@ public class BusinessLogic {
 	private SocketCallback callback = new SocketCallback() {
 		
 		@Override
-		public void onSocketReceiverMsg(String msg) {
-			windowBuilder.printMsgDisplay("Adversário: " + msg);
-		}
-
-		@Override
-		public void onPrintMsgConsole(String msg) {
+		public void onMessageListener(String msg) {
 			windowBuilder.printMsgDisplay(msg);
 		}
 
-		@Override
-		public void onAction(Action action) {
-			startAction(action);
-		}
 	};
 	
 	private void startAction(Action action){
 		switch (action) {
 			case START_SERVER:
-				stopCommunication();
-				
-				windowBuilder.printMsgDisplay("Servidor aberto");
-				windowBuilder.printMsgDisplay("Aguardando conexao... \n");
-
-				new Thread(){
-					@Override
-					public void run() {
-						super.run();
-						
-						server = new SocketServer();
-						configCommunication(server.startServer(PORT));
-					}
-				}.start();
+				startServer();
 				break;
 				
 			case START_CLIENT:
-				if(!WindowBuilder.host.equals("")){
-					stopCommunication();
-					windowBuilder.printMsgDisplay("Cliente iniciado \n");
-
-					client = new SocketClient();
-					configCommunication(client.startClient(WindowBuilder.host, PORT));
-				}else{
-					windowBuilder.printMsgDisplay("Digite o valor do host");
-				}
+				startClient();
 				break;
 			
 			case CLOSE_COMMUNICATION:
-				stopCommunication();
-				break;
-				
-			case LOST_CONNECTION:
-				windowBuilder.printMsgDisplay("Conexao perdida");
-				
-				stopCommunication();
-				windowBuilder.confEnableButtonsMenu(true);
+				closeCommunication();
 				break;
 		}
 	}
+	
+	private void startServer(){
+		closeCommunication();
+		
+		windowBuilder.printMsgDisplay("Servidor aberto\nAguardando conexao...\n");
 
-	public void configCommunication(Socket socket){
-		communication = new SocketCommunication(socket, callback);
-		communication.start();
+		new Thread(){
+			@Override
+			public void run() {
+				super.run();
+				
+				server = new SocketServer();
+				Socket socket = server.startServer(PORT);
+				
+				if(socket != null){
+					configCommunication(socket);
+				}else{
+					windowBuilder.confEnableButtonsMenu(true);
+					windowBuilder.printMsgDisplay("Tempo de espera por conexão ultrapassado\nTente novamente");
+				}
+			}
+		}.start();
 	}
 	
-	public void stopCommunication(){
+	private void startClient(){
+		if(!WindowBuilder.host.equals("")){
+			closeCommunication();
+			windowBuilder.printMsgDisplay("Cliente iniciado...\n");
+
+			client = new SocketClient();
+			Socket socket = client.startClient(WindowBuilder.host, PORT);
+			
+			if(socket != null){
+				configCommunication(socket);
+			}else{
+				windowBuilder.confEnableButtonsMenu(true);
+				windowBuilder.printMsgDisplay("Erro ao tenta se conectar com o servidor\nVerifique se o host digitado está correto");
+			}
+		}else{
+			windowBuilder.printMsgDisplay("Digite o valor do host");
+		}
+	}
+	
+	private void closeCommunication(){
 		if(server != null){
 			server.stopServer();
 		}
@@ -125,6 +125,11 @@ public class BusinessLogic {
 		if(client != null){
 			client.stopClient();
 		}
+	}
+
+	public void configCommunication(Socket socket){
+		communication = new SocketCommunication(socket, callback);
+		communication.start();
 	}
 	
 }

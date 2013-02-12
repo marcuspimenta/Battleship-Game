@@ -1,6 +1,5 @@
 package com.battleship.manager;
 
-import com.battleship.business.Action;
 
 
 /**
@@ -11,9 +10,6 @@ import com.battleship.business.Action;
  */
 public interface SocketCallback {
 
-	void onSocketReceiverMsg(String msg);
+	void onMessageListener(String msg);
 	
-	void onPrintMsgConsole(String msg);
-	
-	void onAction(Action action);
 }

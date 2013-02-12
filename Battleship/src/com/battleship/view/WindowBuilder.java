@@ -154,7 +154,7 @@ public class WindowBuilder extends JFrame implements ActionListener{
 		add(panelChat, BorderLayout.CENTER);
 		add(panel, BorderLayout.WEST);
 		setSize(600, 630);
-		setTitle("Battleship - by Marcus Pimenta");
+		setTitle("Battleship Game - by Marcus Pimenta");
 		
 		setBackground(Color.BLACK);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -234,7 +234,6 @@ public class WindowBuilder extends JFrame implements ActionListener{
 			displayAreaMsg.setText("");
 			
 			printMsgDisplay("Partida abandonada");
-			actionsCallback.onSendMsg("Estou abandonando o jogo");
 			actionsCallback.onActionSelected(Action.CLOSE_COMMUNICATION);
 		}
 	}
