@@ -11,4 +11,8 @@
             <fileset dir="Battleship/bin"/>
         </jar>
     </target>
+    
+    <target name="test">
+        
+    </target>
 </project>
