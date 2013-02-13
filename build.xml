@@ -8,7 +8,7 @@
                 <attribute name="Main-Class" value="com.battleship.main.Main"/>
                 <attribute name="Class-Path" value="."/>
             </manifest>
-            <fileset dir="https://github.com/marcuspimenta/Battleship-Game/tree/master/Battleship/bin"/>
+            <fileset dir="Battleship/bin"/>
         </jar>
     </target>
 </project>
