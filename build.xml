@@ -3,12 +3,12 @@
     <!--this file was created by Eclipse Runnable JAR Export Wizard-->
     <!--ANT 1.7 is required                                        -->
     <target name="create_run_jar">
-        <jar destfile="C:/battleship.jar" filesetmanifest="mergewithoutmain">
+        <jar destfile="battleship.jar" filesetmanifest="mergewithoutmain">
             <manifest>
                 <attribute name="Main-Class" value="com.battleship.main.Main"/>
                 <attribute name="Class-Path" value="."/>
             </manifest>
-            <fileset dir="Battleship/bin"/>
+            <fileset dir="${basedir}/Battleship/bin"/>
         </jar>
     </target>
     
