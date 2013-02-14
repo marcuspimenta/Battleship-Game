@@ -7,7 +7,8 @@ Last build in Travis continuous integration
 [![Build Status](https://travis-ci.org/marcuspimenta/Battleship-Game.png?branch=master)](https://travis-ci.org/marcuspimenta/Battleship-Game)
 
 ##About
-Implement the Battleships game using Sockets as communication
+Implement the Battleships Game using sockets as communication. One of the users is the server connection and the other the client.
+Users can also exchange messages through a chat.
 
 ##Author
 Marcus Vinícius Pimenta  
