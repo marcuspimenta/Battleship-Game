@@ -9,7 +9,7 @@ package com.battleship.business;
  */
 public interface ActionsCallback {
 	
-	void onActionSelected(Action action);
+	void onActionSelected(Action msgReceiver);
 	
 	void onSendMsg(String msg);
 	

@@ -15,6 +15,7 @@ public class Main {
 
 		BusinessLogic businessLogic = new BusinessLogic();
 		businessLogic.showWindow();
+		
 	}
 	
 }

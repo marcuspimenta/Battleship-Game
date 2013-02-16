@@ -36,14 +36,14 @@ public class SocketCommunication extends Thread {
 			 dataInputStream = new DataInputStream(socket.getInputStream());
 			 dataOutputStream = new DataOutputStream(socket.getOutputStream());
 			
-			 socketCallback.onMessageListener("Conexao realizada com sucesso");
+			 socketCallback.onPrintMsgConsole("Conexao realizada com sucesso");
 			 
 			 while (run) {
 				 if(dataInputStream.available() > 0){
-					 byte[] msg = new byte[dataInputStream.available()];
-					 dataInputStream.read(msg, 0, dataInputStream.available());
+					 byte[] msgReceiver = new byte[dataInputStream.available()];
+					 dataInputStream.read(msgReceiver, 0, dataInputStream.available());
 					 
-					 socketCallback.onMessageListener("Adversário: " + new String(msg));
+					 socketCallback.onMessageListener(msgReceiver);
 				 }
 			 }
 		 } catch (IOException e) {
@@ -53,19 +53,19 @@ public class SocketCommunication extends Thread {
 		 }
 	}
 	
-	public void sendMsg(String msg){
+	public void sendMsg(byte[] command){
 		try {
 			if(dataOutputStream != null){
-				dataOutputStream.write(msg.getBytes());
+				dataOutputStream.write(command);
 				dataOutputStream.flush();
 			}else{
-				socketCallback.onMessageListener("Sem conexao");
+				socketCallback.onPrintMsgConsole("Sem conexao");
 			}
 			
 		} catch (IOException e) {
 			e.printStackTrace(); 
 			 
-			socketCallback.onMessageListener("Falha no envio da mensagem\n" +
+			socketCallback.onPrintMsgConsole("Falha no envio da mensagem\n" +
 											 "O adversário deve ter abandonado a partida\n" +
 											 "Para iniciar outra partida abandone está partida");
 		}

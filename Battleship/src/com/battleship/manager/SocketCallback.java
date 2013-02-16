@@ -10,6 +10,8 @@ package com.battleship.manager;
  */
 public interface SocketCallback {
 
-	void onMessageListener(String msg);
+	void onMessageListener(byte[] command);
+	
+	void onPrintMsgConsole(String msg);
 	
 }

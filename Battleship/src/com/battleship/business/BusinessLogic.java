@@ -6,6 +6,8 @@ import com.battleship.manager.SocketCallback;
 import com.battleship.manager.SocketClient;
 import com.battleship.manager.SocketCommunication;
 import com.battleship.manager.SocketServer;
+import com.battleship.protocol.ActionCommand;
+import com.battleship.protocol.Command;
 import com.battleship.view.WindowBuilder;
 
 /**
@@ -22,9 +24,11 @@ public class BusinessLogic {
 	private SocketClient client;
 	private SocketCommunication communication;
 	
+	private Command command;
 	private WindowBuilder windowBuilder;
 	
 	public BusinessLogic(){
+		command = new Command();
 		windowBuilder = new WindowBuilder(actionsCallback);
 	}
 	
@@ -42,22 +46,41 @@ public class BusinessLogic {
 		@Override
 		public void onSendMsg(String msg) {
 			if(communication != null){
-				communication.sendMsg(msg);
+				communication.sendMsg(command.formCommand(ActionCommand.MSG_CHAT.getActionCommand(), msg.getBytes()));
 			}else{
 				windowBuilder.printMsgDisplay("Sem conexão");
 			}
 		}
-		
 	};
 	
 	private SocketCallback callback = new SocketCallback() {
 		
 		@Override
-		public void onMessageListener(String msg) {
-			windowBuilder.printMsgDisplay(msg);
+		public void onMessageListener(byte[] msgReceiver) {
+			command(msgReceiver);
 		}
 
+		@Override
+		public void onPrintMsgConsole(String msg) {
+			windowBuilder.printMsgDisplay(msg);
+		}
 	};
+	
+	public void command(byte[] msgReceiver){
+		int actionCommand = command.getActionCommand(msgReceiver);
+		
+		if(actionCommand == ActionCommand.MSG_CHAT.getActionCommand()){
+			byte[] content = command.getContentCommand(msgReceiver);
+			
+			if(content != null){
+				windowBuilder.printMsgDisplay("Adversário: " + new String(content));
+			}
+		}else if(actionCommand == ActionCommand.XY_SQUARE.getActionCommand()){
+			//TODO
+		}else{
+			windowBuilder.printMsgDisplay("Mensagem inválida");
+		}
+	}
 	
 	private void startAction(Action action){
 		switch (action) {
