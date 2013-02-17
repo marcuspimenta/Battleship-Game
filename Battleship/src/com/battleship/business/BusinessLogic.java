@@ -57,7 +57,7 @@ public class BusinessLogic {
 		
 		@Override
 		public void onMessageListener(byte[] msgReceiver) {
-			command(msgReceiver);
+			manageCommand(msgReceiver);
 		}
 
 		@Override
@@ -66,7 +66,7 @@ public class BusinessLogic {
 		}
 	};
 	
-	public void command(byte[] msgReceiver){
+	public void manageCommand(byte[] msgReceiver){
 		int actionCommand = command.getActionCommand(msgReceiver);
 		
 		if(actionCommand == ActionCommand.MSG_CHAT.getActionCommand()){

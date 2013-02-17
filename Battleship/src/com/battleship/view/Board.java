@@ -25,27 +25,14 @@ public class Board {
 	
 	private Square[][] square;
 	
-	private boolean area[][] = { {false, false, false, false, false, false, false, false, false, false, false, false, false, false, false},
-								 {false, false, false, false, false, false, false, false, false, false, false, false, false, false, false},
-								 {false, false, false, false, false, false, false, false, false, false, false, false, false, false, false},
-								 {false, false, false, false, false, false, false, false, false, false, false, false, false, false, false},
-								 {false, false, false, false, false, false, false, false, false, false, false, false, false, false, false},
-								 {false, false, false, false, false, false, false, false, false, false, false, false, false, false, false},
-								 {false, false, false, false, false, false, false, false, false, false, false, false, false, false, false},
-								 {false, false, false, false, false, false, false, false, false, false, false, false, false, false, false},
-								 {false, false, false, false, false, false, false, false, false, false, false, false, false, false, false},
-								 {false, false, false, false, false, false, false, false, false, false, false, false, false, false, false},
-								 {false, false, false, false, false, false, false, false, false, false, false, false, false, false, false},
-								 {false, false, false, false, false, false, false, false, false, false, false, false, false, false, false},
-								 {false, false, false, false, false, false, false, false, false, false, false, false, false, false, false},
-								 {false, false, false, false, false, false, false, false, false, false, false, false, false, false, false},
-								 {false, false, false, false, false, false, false, false, false, false, false, false, false, false, false}};
+	private boolean area[][] = new boolean[15][15];
 	
 	public JPanel paintBoard(){
 		JPanel board = new JPanel();
 		board.setBorder(new TitledBorder("Seu jogo"));
 		board.setLayout(new GridLayout(15, 15, 0, 0));
 		
+		resetBoard();
 		shufflingPieces();
 		
 		square = new Square[15][15];

@@ -11,7 +11,7 @@ public class Command {
 	private final int COUNT_BYTE_FIXED = 3;
 	
 	public byte[] getContentCommand(byte[] command){
-		if(command.length > 4){
+		if(validateCommand(command)){
 			byte[] content = new byte[command.length - 3];
 			
 			for (int i = 2, m = 0; i < command.length - 1; i++, m++) {
@@ -25,7 +25,7 @@ public class Command {
 	}
 	
 	public int getActionCommand(byte[] command){
-		if(validateChecksun(command) && command.length > 4){
+		if(validateCommand(command)){
 			return command[1];
 		}else{
 			return -1;
@@ -56,6 +56,14 @@ public class Command {
 		}
 		
 		return (byte)checksun;
+	}
+	
+	public boolean validateCommand(byte[] command){
+		if(validateChecksun(command) && command.length > 3 && command[0] == ActionCommand.START.getActionCommand()){
+			return true;
+		}else{
+			return false;
+		}
 	}
 	
 	public boolean validateChecksun(byte[] command){
