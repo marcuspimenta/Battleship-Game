@@ -10,7 +10,8 @@ public enum ActionCommand {
 	
 	START(10),
     MSG_CHAT(20),
-	XY_SQUARE(30);
+	XY_SQUARE(30),
+	RESPONSE_XY(40);
     
     private int actionCommand;
     

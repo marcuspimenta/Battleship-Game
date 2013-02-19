@@ -64,10 +64,8 @@ public class SocketCommunication extends Thread {
 			
 		} catch (IOException e) {
 			e.printStackTrace(); 
-			 
-			socketCallback.onPrintMsgConsole("Falha no envio da mensagem\n" +
-											 "O adversário deve ter abandonado a partida\n" +
-											 "Para iniciar outra partida abandone está partida");
+			
+			socketCallback.onPrintMsgConsole("Conexão perdida. Inicie uma nova partida\n");
 		}
 	}
 	

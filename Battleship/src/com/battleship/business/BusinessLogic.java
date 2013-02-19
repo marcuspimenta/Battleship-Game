@@ -1,5 +1,6 @@
 package com.battleship.business;
 
+import java.awt.Color;
 import java.net.Socket;
 
 import com.battleship.manager.SocketCallback;
@@ -19,6 +20,11 @@ import com.battleship.view.WindowBuilder;
 public class BusinessLogic {
 	
 	private final int PORT = 97;
+	//private final int NUMBER_MOVES = 3;
+	//private final int NUMBER_RESPONSES = 3;
+	
+	//private int moves_sent = 0;
+	//private int responses_receiver = 0;
 	
 	private SocketServer server;
 	private SocketClient client;
@@ -44,12 +50,13 @@ public class BusinessLogic {
 		}
 
 		@Override
-		public void onSendMsg(String msg) {
-			if(communication != null){
-				communication.sendMsg(command.formCommand(ActionCommand.MSG_CHAT.getActionCommand(), msg.getBytes()));
-			}else{
-				windowBuilder.printMsgDisplay("Sem conexão");
-			}
+		public void onSendMessageChat(String msg) {
+			sendCommand(command.formCommand(ActionCommand.MSG_CHAT.getActionCommand(), msg.getBytes()));
+		}
+
+		@Override
+		public void onSendCoordinateSquare(int row, int column) {
+			sendCommand(command.formCommand(ActionCommand.XY_SQUARE.getActionCommand(), new byte[]{(byte)row, (byte)column}));			
 		}
 	};
 	
@@ -75,10 +82,37 @@ public class BusinessLogic {
 			if(content != null){
 				windowBuilder.printMsgDisplay("Adversário: " + new String(content));
 			}
+			
 		}else if(actionCommand == ActionCommand.XY_SQUARE.getActionCommand()){
-			//TODO
+			byte[] content = command.getContentCommand(msgReceiver);
+			
+			if(windowBuilder.getBoard().getValueSquare(content[0], content[1])){
+				windowBuilder.getBoard().setColorSquare(content[0], content[1], Color.RED);
+				sendCommand(command.formCommand(ActionCommand.RESPONSE_XY.getActionCommand(), new byte[]{1, content[0], content[1]}));
+			}else{
+				windowBuilder.getBoard().setColorSquare(content[0], content[1], Color.BLUE);
+				sendCommand(command.formCommand(ActionCommand.RESPONSE_XY.getActionCommand(), new byte[]{0, content[0], content[1]}));
+			}
+			
+		}else if(actionCommand == ActionCommand.RESPONSE_XY.getActionCommand()){
+			byte[] content = command.getContentCommand(msgReceiver);
+			
+			if(content[0] == 1){
+				windowBuilder.setColorSquare(content[1], content[2], Color.RED);
+			}else{
+				windowBuilder.setColorSquare(content[1], content[2], Color.BLUE);
+			}
+			
 		}else{
 			windowBuilder.printMsgDisplay("Mensagem inválida");
+		}
+	}
+	
+	public void sendCommand(byte[] command){
+		if(communication != null){
+			communication.sendMsg(command);
+		}else{
+			windowBuilder.printMsgDisplay("Sem conexão");
 		}
 	}
 	

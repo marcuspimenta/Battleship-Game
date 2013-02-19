@@ -11,6 +11,8 @@ public interface ActionsCallback {
 	
 	void onActionSelected(Action msgReceiver);
 	
-	void onSendMsg(String msg);
+	void onSendMessageChat(String msg);
+	
+	void onSendCoordinateSquare(int row, int column);
 	
 }

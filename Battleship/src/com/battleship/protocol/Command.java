@@ -12,7 +12,7 @@ public class Command {
 	
 	public byte[] getContentCommand(byte[] command){
 		if(validateCommand(command)){
-			byte[] content = new byte[command.length - 3];
+			byte[] content = new byte[command.length - COUNT_BYTE_FIXED];
 			
 			for (int i = 2, m = 0; i < command.length - 1; i++, m++) {
 				content[m] = command[i];
@@ -35,7 +35,7 @@ public class Command {
 	public byte[] formCommand(int action, byte[] count){
 		byte checksun = calculateChecksun(action, count);
 		
-		byte[] command = new byte[COUNT_BYTE_FIXED + count.length];
+		byte[] command = new byte[count.length + COUNT_BYTE_FIXED];
 		
 		command[0] = (byte) ActionCommand.START.getActionCommand();
 		command[1] = (byte) action;
@@ -59,7 +59,7 @@ public class Command {
 	}
 	
 	public boolean validateCommand(byte[] command){
-		if(validateChecksun(command) && command.length > 3 && command[0] == ActionCommand.START.getActionCommand()){
+		if(validateChecksun(command) && command.length > COUNT_BYTE_FIXED && command[0] == ActionCommand.START.getActionCommand()){
 			return true;
 		}else{
 			return false;

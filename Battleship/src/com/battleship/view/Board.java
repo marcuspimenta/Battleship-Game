@@ -49,6 +49,7 @@ public class Board {
 	
 	public void repaintBoard(){
 		resetBoard();
+		resetSquares();
 		shufflingPieces();
 		
 		for (int row = 0; row < square.length; row++) {
@@ -118,6 +119,30 @@ public class Board {
 			for (int column = 0; column < area[row].length; column++) {
 				area[row][column] = false;
 			}
+		}
+	}
+	
+	public void resetSquares(){
+		for (int row = 0; row < square.length; row++) {
+			for (int column = 0; column < square[row].length; column++) {
+				square[row][column].setSquareColor(Color.BLACK);
+				square[row][column].setFill(false);
+				square[row][column].repaint();
+			}
+		}
+	}
+	
+	public void setColorSquare(int row, int column, Color color){
+		square[row][column].setFill(true);
+		square[row][column].setSquareColor(color);
+		square[row][column].repaint();
+	}
+	
+	public boolean getValueSquare(int x, int y){
+		if(x <= area.length && y <= area.length){
+			return area[x][y];
+		}else{
+			return false;
 		}
 	}
 	

@@ -46,6 +46,7 @@ public class WindowBuilder extends JFrame implements ActionListener{
 	private Board board;
 	private JButton send;
 	private JTextArea message;
+	private JPanel boardSecondary;
 	private JTextArea displayAreaMsg;
 	private JScrollPane scrollpane;
 	private JMenuItem menuAbout, menuExit, menuServer, menuClient, menuRepaint, menuQuiGame;
@@ -65,19 +66,13 @@ public class WindowBuilder extends JFrame implements ActionListener{
 		
 		board = new Board();
 		
-		JPanel boardSecondary = new JPanel();
+		boardSecondary = new JPanel();
 		boardSecondary.setBorder(new TitledBorder("Jogo do Adversário"));
 		boardSecondary.setLayout(new GridLayout(15, 15, 0, 0));
 		
 		squareSecondary = new Square[15][15];
+		createCleanBoard();
 		
-		for (int row = 0; row < squareSecondary.length; row++) {
-			for (int column = 0; column < squareSecondary[row].length; column++) {
-				squareSecondary[row][column] = new Square(row, column, Color.BLACK, false, true);
-				squareSecondary[row][column].addMouseListener(mouseAdapter);
-				boardSecondary.add(squareSecondary[row][column]);
-			}
-		}
 		
 		displayAreaMsg = new JTextArea(10, 30);
 		displayAreaMsg.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.black));
@@ -192,7 +187,7 @@ public class WindowBuilder extends JFrame implements ActionListener{
 			if(message.getText().length() > 0){
 				if(event.getSource().equals(send)){
 					printMsgDisplay("Você: " + message.getText());
-		   			actionsCallback.onSendMsg(message.getText());
+		   			actionsCallback.onSendMessageChat(message.getText());
 
 		   			message.setText("");
 				}
@@ -233,6 +228,9 @@ public class WindowBuilder extends JFrame implements ActionListener{
 			confEnableButtonsMenu(true);
 			displayAreaMsg.setText("");
 			
+			reseatBoard();
+			board.repaintBoard();
+			
 			printMsgDisplay("Partida abandonada");
 			actionsCallback.onActionSelected(Action.CLOSE_COMMUNICATION);
 		}
@@ -242,8 +240,9 @@ public class WindowBuilder extends JFrame implements ActionListener{
 		
 		public void mouseReleased(MouseEvent e){
 			Square square = (Square)(e.getSource());
-			
 			System.out.println("(x,y) - (" + square.getColumn() + "," + square.getRow() + ")");
+			
+			actionsCallback.onSendCoordinateSquare(square.getRow(), square.getColumn());
 		}
 		
 	};
@@ -258,6 +257,35 @@ public class WindowBuilder extends JFrame implements ActionListener{
 		menuServer.setEnabled(value);
 		menuRepaint.setEnabled(value);
 		menuQuiGame.setEnabled(!value);
+	}
+	
+	public Board getBoard(){
+		return board;
+	}
+	
+	public void setColorSquare(int x, int y, Color color){
+		squareSecondary[x][y].setFill(true);
+		squareSecondary[x][y].setSquareColor(color);
+		squareSecondary[x][y].repaint();
+	}
+	
+	public void createCleanBoard(){
+		for (int row = 0; row < squareSecondary.length; row++) {
+			for (int column = 0; column < squareSecondary[row].length; column++) {
+				squareSecondary[row][column] = new Square(row, column, Color.BLACK, false, true);
+				squareSecondary[row][column].addMouseListener(mouseAdapter);
+				boardSecondary.add(squareSecondary[row][column]);
+			}
+		}
+	}
+	
+	public void reseatBoard(){
+		for (int row = 0; row < squareSecondary.length; row++) {
+			for (int column = 0; column < squareSecondary[row].length; column++) {
+				squareSecondary[row][column].setFill(false);
+				squareSecondary[row][column].repaint();
+			}
+		}
 	}
 	
 }
