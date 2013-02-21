@@ -24,6 +24,20 @@ public class Command {
 		}
 	}
 	
+	public byte[] getNameComponent(byte[] command){
+		if(validateCommand(command)){
+			byte[] content = new byte[command.length - 6];
+			
+			for (int i = 5, m = 0; i < command.length - 1; i++, m++) {
+				content[m] = command[i];
+			}
+			
+			return content;
+		}else{
+			return null;
+		}
+	}
+	
 	public int getActionCommand(byte[] command){
 		if(validateCommand(command)){
 			return command[1];
@@ -48,10 +62,44 @@ public class Command {
 		return command;
 	}
 	
+	public byte[] formCommand(int action, byte[] count, byte[] nameComponent){
+		byte checksun = calculateChecksun(action, count, nameComponent);
+		
+		byte[] command = new byte[count.length + nameComponent.length + COUNT_BYTE_FIXED];
+		
+		command[0] = (byte) ActionCommand.START.getActionCommand();
+		command[1] = (byte) action;
+		command[command.length - 1] = checksun;
+		
+		for (int a = 0, b = 2; a < count.length; a++, b++) {
+			command[b] = count[a];
+		}
+		
+		for (int a = 0, b = count.length + 2; a < nameComponent.length; a++, b++) {
+			command[b] = nameComponent[a];
+		}
+		
+		return command;
+	}
+	
 	public byte calculateChecksun(int action, byte[] content){
 		int checksun = ActionCommand.START.getActionCommand() + action;
 		
 		for (byte info : content) {
+			checksun += info;
+		}
+		
+		return (byte)checksun;
+	}
+	
+	public byte calculateChecksun(int action, byte[] content, byte[] contentAux){
+		int checksun = ActionCommand.START.getActionCommand() + action;
+		
+		for (byte info : content) {
+			checksun += info;
+		}
+		
+		for (byte info : contentAux) {
 			checksun += info;
 		}
 		

@@ -48,7 +48,7 @@ public class SocketCommunication extends Thread {
 			 }
 		 } catch (IOException e) {
 			 e.printStackTrace(); 
-			 
+		 
 			 stopComunication();
 		 }
 	}
@@ -65,6 +65,7 @@ public class SocketCommunication extends Thread {
 		} catch (IOException e) {
 			e.printStackTrace(); 
 			
+			stopComunication();
 			socketCallback.onPrintMsgConsole("Conexão perdida. Inicie uma nova partida\n");
 		}
 	}
@@ -76,10 +77,13 @@ public class SocketCommunication extends Thread {
 			if(dataInputStream != null && dataOutputStream != null){
 				dataInputStream.close();
 				dataOutputStream.close();
+				
+				dataInputStream = null;
+				dataOutputStream = null;
 			}
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
-		}
+		} 
 	 }
 
  }

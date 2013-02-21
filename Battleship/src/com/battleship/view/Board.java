@@ -12,6 +12,7 @@ import com.battleship.components.Aircraftcarrier;
 import com.battleship.components.Battleship;
 import com.battleship.components.Component;
 import com.battleship.components.Cruiser;
+import com.battleship.components.Piece;
 import com.battleship.components.Seaplane;
 import com.battleship.components.Submarine;
 
@@ -26,6 +27,7 @@ public class Board {
 	private Square[][] square;
 	
 	private boolean area[][] = new boolean[15][15];
+	private ArrayList<Component> componentes = new ArrayList<Component>();
 	
 	public JPanel paintBoard(){
 		JPanel board = new JPanel();
@@ -76,41 +78,46 @@ public class Board {
 		listComponents.add(new Battleship());
 		listComponents.add(new Battleship());
 		
-		ArrayList<Integer[]> listQuadrants = new ArrayList<Integer[]>();
-		listQuadrants.add(new Integer[]{0,0});
-		listQuadrants.add(new Integer[]{0,5});
-		listQuadrants.add(new Integer[]{0,10});
-		listQuadrants.add(new Integer[]{3,0});
-		listQuadrants.add(new Integer[]{3,5});
-		listQuadrants.add(new Integer[]{3,10});
-		listQuadrants.add(new Integer[]{6,0});
-		listQuadrants.add(new Integer[]{6,5});
-		listQuadrants.add(new Integer[]{6,10});
-		listQuadrants.add(new Integer[]{9,0});
-		listQuadrants.add(new Integer[]{9,5});
-		listQuadrants.add(new Integer[]{9,10});
-		listQuadrants.add(new Integer[]{12,0});
-		listQuadrants.add(new Integer[]{12,5});
-		listQuadrants.add(new Integer[]{12,10});
-		
 		while(listComponents.size() > 0){
-			int randomIndexListComponents = (new Random()).nextInt(listComponents.size());
-			int randomIndexListQuadrants = (new Random()).nextInt(listQuadrants.size());
+			int randomIndexList = (new Random()).nextInt(listComponents.size());
+			int randomRow = (new Random()).nextInt(15);
+			int randomColumn = (new Random()).nextInt(15);
 			
-			paintComponent(listQuadrants.get(randomIndexListQuadrants)[0], 
-						   listQuadrants.get(randomIndexListQuadrants)[1], 
-						   listComponents.get(randomIndexListComponents));
-			
-			listComponents.remove(randomIndexListComponents);
-			listQuadrants.remove(randomIndexListQuadrants);
+			if(verifyAreaComponentSupport(listComponents.get(randomIndexList), randomRow, randomColumn) && !verifyComponentArea(listComponents.get(randomIndexList), randomRow, randomColumn)){
+				Component component = listComponents.get(randomIndexList);
+				component.getPosition().setRow(randomRow);
+				component.getPosition().setColumn(randomColumn);
+				component.updatePositonPieces();
+				
+				componentes.add(component);
+				putComponent(component);
+				
+				listComponents.remove(randomIndexList);
+			}
 		}
 	}
 	
-	public void paintComponent(int row, int column, Component component){
-		for (int x = row, a = 0; x < row + 3; x++, a++) {
-			for (int y = column, b = 0; y < column + 5; y++, b++) {
-				area[x][y] = component.getArea()[a][b];
+	public boolean verifyAreaComponentSupport(Component component, int row, int column){
+		if(component.getHeight() + row <= 15 && component.getWidth() + column <= 15){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
+	public boolean verifyComponentArea(Component component, int row, int column){
+		for (Piece piece : component.getPieces()) {
+			if(area[piece.getPosition().getRow() + row][piece.getPosition().getColumn() + column]){
+				return true;
 			}
+		}
+		
+		return false;
+	}
+
+	public void putComponent(Component component){
+		for (Piece piece : component.getPieces()) {
+			area[piece.getPosition().getRow()][piece.getPosition().getColumn()] = true;
 		}
 	}
 	
@@ -136,6 +143,18 @@ public class Board {
 		square[row][column].setFill(true);
 		square[row][column].setSquareColor(color);
 		square[row][column].repaint();
+	}
+	
+	public Component getComponent(int row, int column){
+		for (Component component : componentes) {
+			for (Piece piece : component.getPieces()) {
+				if(piece.getPosition().getRow() == row && piece.getPosition().getColumn() == column){
+					return component;
+				}
+			}
+		}
+		
+		return null;
 	}
 	
 	public boolean getValueSquare(int x, int y){

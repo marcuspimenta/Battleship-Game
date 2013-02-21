@@ -26,10 +26,11 @@ import com.battleship.business.Action;
 import com.battleship.business.ActionsCallback;
 import com.battleship.components.Aircraftcarrier;
 import com.battleship.components.Battleship;
+import com.battleship.components.Component;
 import com.battleship.components.Cruiser;
+import com.battleship.components.Piece;
 import com.battleship.components.Seaplane;
 import com.battleship.components.Submarine;
-
 
 /**
  * 
@@ -40,6 +41,8 @@ import com.battleship.components.Submarine;
 @SuppressWarnings("serial")
 public class WindowBuilder extends JFrame implements ActionListener{
 
+	public static String host;
+	
 	private Container c;
 	private Square[][] squareSecondary;
 	
@@ -53,9 +56,6 @@ public class WindowBuilder extends JFrame implements ActionListener{
 	
 	private ActionsCallback actionsCallback;
 
-	public static String host;
-	
-	
 	public WindowBuilder(ActionsCallback actionsCallback){
 		this.actionsCallback = actionsCallback;
 	}
@@ -72,8 +72,7 @@ public class WindowBuilder extends JFrame implements ActionListener{
 		
 		squareSecondary = new Square[15][15];
 		createCleanBoard();
-		
-		
+
 		displayAreaMsg = new JTextArea(10, 30);
 		displayAreaMsg.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.black));
 		displayAreaMsg.setLineWrap(true);
@@ -84,7 +83,7 @@ public class WindowBuilder extends JFrame implements ActionListener{
 		
 		message = new JTextArea(1, 25);
 		message.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.black));
-		message.setLineWrap(true);
+		message.getDocument().putProperty("filterNewlines", Boolean.TRUE);
 		message.setEditable(true);
 		
 		send = new JButton("Enviar");
@@ -98,11 +97,11 @@ public class WindowBuilder extends JFrame implements ActionListener{
 		JPanel panel = new JPanel();
 		panel.setBorder(new TitledBorder("Armas"));
 		panel.setLayout(new GridLayout(3, 2));
-		panel.add(showPiecesGame("Hidroavião", 3, 5, (new Seaplane()).getArea()));
-		panel.add(showPiecesGame("Submarino", 3, 5, (new Submarine()).getArea()));
-		panel.add(showPiecesGame("Cruzador", 3, 5, (new Cruiser()).getArea()));
-		panel.add(showPiecesGame("Encouraçado", 3, 5, (new Battleship()).getArea()));
-		panel.add(showPiecesGame("Porta-avião", 3, 5, (new Aircraftcarrier()).getArea()));
+		panel.add(showPiecesGame("Hidroavião", 3, 5, (new Seaplane(1, 1))));
+		panel.add(showPiecesGame("Submarino", 3, 5, (new Submarine(1, 2))));
+		panel.add(showPiecesGame("Cruzador", 3, 5, (new Cruiser(1, 1))));
+		panel.add(showPiecesGame("Encouraçado", 3, 5, (new Battleship(1, 0))));
+		panel.add(showPiecesGame("Porta-avião", 3, 5, (new Aircraftcarrier(1, 0))));
 		
 		JPanel panelChat = new JPanel();
 		panelChat.add(scrollpane, BorderLayout.CENTER);
@@ -160,17 +159,23 @@ public class WindowBuilder extends JFrame implements ActionListener{
 		confEnableButtonsMenu(true);
 	}
 	
-	public JPanel showPiecesGame(String title, int rows, int cols, boolean[][] paint){
+	public JPanel showPiecesGame(String title, int rows, int cols, Component component){
 		JPanel panel = new JPanel();
 		panel.setBorder(new TitledBorder(title));
 		panel.setLayout(new GridLayout(rows, cols));
+		
+		boolean area[][] = new boolean[rows][cols];
+		
+		for (Piece piece : component.getPieces()) {
+			area[piece.getPosition().getRow()][piece.getPosition().getColumn()] = true;
+		}
 		
 		Square[][] square = new Square[rows][cols];
 		
 		for (int row = 0; row < square.length; row++) {
 			for (int column = 0; column < square[row].length; column++) {
-				if(paint != null){
-					square[row][column] = new Square(row, column, Color.BLACK, paint[row][column], paint[row][column]);
+				if(area[row][column]){
+					square[row][column] = new Square(row, column, Color.BLACK, area[row][column], area[row][column]);
 				}else{
 					square[row][column] = new Square(row, column, Color.BLACK, false, false);
 				}

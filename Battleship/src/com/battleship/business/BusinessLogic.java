@@ -3,6 +3,7 @@ package com.battleship.business;
 import java.awt.Color;
 import java.net.Socket;
 
+import com.battleship.components.Component;
 import com.battleship.manager.SocketCallback;
 import com.battleship.manager.SocketClient;
 import com.battleship.manager.SocketCommunication;
@@ -87,8 +88,9 @@ public class BusinessLogic {
 			byte[] content = command.getContentCommand(msgReceiver);
 			
 			if(windowBuilder.getBoard().getValueSquare(content[0], content[1])){
+				Component component = windowBuilder.getBoard().getComponent(content[0], content[1]);
 				windowBuilder.getBoard().setColorSquare(content[0], content[1], Color.RED);
-				sendCommand(command.formCommand(ActionCommand.RESPONSE_XY.getActionCommand(), new byte[]{1, content[0], content[1]}));
+				sendCommand(command.formCommand(ActionCommand.RESPONSE_XY.getActionCommand(), new byte[]{1, content[0], content[1]}, component.getName().getBytes()));
 			}else{
 				windowBuilder.getBoard().setColorSquare(content[0], content[1], Color.BLUE);
 				sendCommand(command.formCommand(ActionCommand.RESPONSE_XY.getActionCommand(), new byte[]{0, content[0], content[1]}));
@@ -98,6 +100,7 @@ public class BusinessLogic {
 			byte[] content = command.getContentCommand(msgReceiver);
 			
 			if(content[0] == 1){
+				windowBuilder.printMsgDisplay("Você acertou a peça: " + new String(command.getNameComponent(msgReceiver)));
 				windowBuilder.setColorSquare(content[1], content[2], Color.RED);
 			}else{
 				windowBuilder.setColorSquare(content[1], content[2], Color.BLUE);
@@ -175,6 +178,11 @@ public class BusinessLogic {
 	}
 	
 	private void closeCommunication(){
+		if(communication != null){
+			communication.stopComunication();
+			communication = null;
+		}
+		
 		if(server != null){
 			server.stopServer();
 		}

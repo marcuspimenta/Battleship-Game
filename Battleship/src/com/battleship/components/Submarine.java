@@ -6,15 +6,31 @@ package com.battleship.components;
  * @email mvinicius.pimenta@gmail.com
  * @date 19:21:59 04/02/2013
  */
-public class Submarine implements Component{
+public class Submarine extends Component{
 	
-	private boolean[][] submarine = {{false, false, false, false, false},
-									 {false, false, true, false, false},
-			 						 {false, false, false, false, false}};
+	public Submarine(){
+		super();
+		initializePieces();
+	}
+	
+	public Submarine(int row, int column){
+		super(row, column);
+		initializePieces();
+	}
+	
+	@Override
+	public String getName() {
+		return "Submarino";
+	}
+	
+	@Override
+	public void updatePositonPieces() {
+		pieces[0].setCoordinatePosition(position.getRow(), position.getColumn());
+	}
 
 	@Override
-	public boolean[][] getArea() {
-		return submarine;
+	public void initializePieces() {
+		pieces = new Piece[]{new Piece(position.getRow(), position.getColumn())};
 	}
 
 }
