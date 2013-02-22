@@ -89,6 +89,8 @@ public class BusinessLogic {
 			
 			if(windowBuilder.getBoard().getValueSquare(content[0], content[1])){
 				Component component = windowBuilder.getBoard().getComponent(content[0], content[1]);
+				
+				windowBuilder.getBoard().setValueSquare(content[0], content[1], false);
 				windowBuilder.getBoard().setColorSquare(content[0], content[1], Color.RED);
 				sendCommand(command.formCommand(ActionCommand.RESPONSE_XY.getActionCommand(), new byte[]{1, content[0], content[1]}, component.getName().getBytes()));
 			}else{

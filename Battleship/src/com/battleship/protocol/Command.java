@@ -62,10 +62,10 @@ public class Command {
 		return command;
 	}
 	
-	public byte[] formCommand(int action, byte[] count, byte[] nameComponent){
-		byte checksun = calculateChecksun(action, count, nameComponent);
+	public byte[] formCommand(int action, byte[] count, byte[] countAux){
+		byte checksun = calculateChecksun(action, count, countAux);
 		
-		byte[] command = new byte[count.length + nameComponent.length + COUNT_BYTE_FIXED];
+		byte[] command = new byte[count.length + countAux.length + COUNT_BYTE_FIXED];
 		
 		command[0] = (byte) ActionCommand.START.getActionCommand();
 		command[1] = (byte) action;
@@ -75,8 +75,8 @@ public class Command {
 			command[b] = count[a];
 		}
 		
-		for (int a = 0, b = count.length + 2; a < nameComponent.length; a++, b++) {
-			command[b] = nameComponent[a];
+		for (int a = 0, b = count.length + 2; a < countAux.length; a++, b++) {
+			command[b] = countAux[a];
 		}
 		
 		return command;

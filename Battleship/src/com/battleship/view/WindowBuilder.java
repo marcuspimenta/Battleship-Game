@@ -214,14 +214,18 @@ public class WindowBuilder extends JFrame implements ActionListener{
 			board.repaintBoard();
 			
 		}else if(event.getSource() == menuClient){
-			confEnableButtonsMenu(false);
 			displayAreaMsg.setText("");
+			
+			//JOptionPane.showMessageDialog(null, "Thanks for playing.", "Thanks", 1);
 			
 			host = JOptionPane.showInputDialog(c.getParent(),
 											   "Digite o host do servidor:", "Configuração do host do servidor",
 											   JOptionPane.QUESTION_MESSAGE);
 			
-			actionsCallback.onActionSelected(Action.START_CLIENT);
+			if(host != null && !host.equals("")){
+				confEnableButtonsMenu(false);
+				actionsCallback.onActionSelected(Action.START_CLIENT);
+			}
 			
 		}else if(event.getSource() == menuServer){
 			confEnableButtonsMenu(false);
@@ -245,9 +249,12 @@ public class WindowBuilder extends JFrame implements ActionListener{
 		
 		public void mouseReleased(MouseEvent e){
 			Square square = (Square)(e.getSource());
-			System.out.println("(x,y) - (" + square.getColumn() + "," + square.getRow() + ")");
 			
-			actionsCallback.onSendCoordinateSquare(square.getRow(), square.getColumn());
+			if(!squareSecondary[square.getRow()][square.getColumn()].isFill()){
+				actionsCallback.onSendCoordinateSquare(square.getRow(), square.getColumn());
+			}else{
+				printMsgDisplay("Você disperdiçou uma jogada");
+			}
 		}
 		
 	};

@@ -165,6 +165,12 @@ public class Board {
 		}
 	}
 	
+	public void setValueSquare(int x, int y, boolean value){
+		if(x <= area.length && y <= area.length){
+			area[x][y] = value;
+		}
+	}
+	
 	public boolean[][] getArea(){
 		return area;
 	}
