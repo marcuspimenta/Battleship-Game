@@ -122,7 +122,7 @@ public class WindowBuilder extends JFrame implements ActionListener{
 		menuClient = new JMenuItem("Start client");
 		menuClient.addActionListener(this);
 		
-		menuQuitGame = new JMenuItem("Abandoning game");
+		menuQuitGame = new JMenuItem("Quit game");
 		menuQuitGame.addActionListener(this);
 		
 		menuRepaint = new JMenuItem("New board");
@@ -149,7 +149,7 @@ public class WindowBuilder extends JFrame implements ActionListener{
 		add(panelChat, BorderLayout.CENTER);
 		add(panel, BorderLayout.WEST);
 		setSize(600, 630);
-		setTitle("Battleship Game - by Marcus Pimenta");
+		setTitle("Battleship Game");
 		
 		setBackground(Color.BLACK);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
