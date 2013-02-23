@@ -24,7 +24,7 @@ public class Command {
 		}
 	}
 	
-	public byte[] getNameComponent(byte[] command){
+	public byte[] getContentAuxComand(byte[] command){
 		if(validateCommand(command)){
 			byte[] content = new byte[command.length - 6];
 			

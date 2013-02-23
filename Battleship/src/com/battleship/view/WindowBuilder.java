@@ -38,12 +38,13 @@ import com.battleship.components.Submarine;
  * @email mvinicius.pimenta@gmail.com
  * @date 16:48:34 30/01/2013
  */
+
 @SuppressWarnings("serial")
 public class WindowBuilder extends JFrame implements ActionListener{
 
 	public static String host;
 	
-	private Container c;
+	private Container container;
 	private Square[][] squareSecondary;
 	
 	private Board board;
@@ -52,17 +53,17 @@ public class WindowBuilder extends JFrame implements ActionListener{
 	private JPanel boardSecondary;
 	private JTextArea displayAreaMsg;
 	private JScrollPane scrollpane;
-	private JMenuItem menuAbout, menuExit, menuServer, menuClient, menuRepaint, menuQuiGame;
+	private JMenuItem menuAbout, menuExit, menuServer, menuClient, menuRepaint, menuQuitGame;
 	
-	private ActionsCallback actionsCallback;
+	private final ActionsCallback actionsCallback;
 
-	public WindowBuilder(ActionsCallback actionsCallback){
+	public WindowBuilder(final ActionsCallback actionsCallback){
 		this.actionsCallback = actionsCallback;
 	}
 	
 	public void printTabuleiro(){
 		
-		c = getContentPane();
+		container = getContentPane();
 		
 		board = new Board();
 		
@@ -89,12 +90,12 @@ public class WindowBuilder extends JFrame implements ActionListener{
 		send = new JButton("Enviar");
 		send.addActionListener(this);
 		
-		JPanel panelTextButton = new JPanel();
+		final JPanel panelTextButton = new JPanel();
 		panelTextButton.setLayout(new BorderLayout());
 		panelTextButton.add(message, BorderLayout.WEST);
 		panelTextButton.add(send, BorderLayout.EAST);
 		
-		JPanel panel = new JPanel();
+		final JPanel panel = new JPanel();
 		panel.setBorder(new TitledBorder("Armas"));
 		panel.setLayout(new GridLayout(3, 2));
 		panel.add(showPiecesGame("Hidroavião", 3, 5, (new Seaplane(1, 1))));
@@ -103,17 +104,17 @@ public class WindowBuilder extends JFrame implements ActionListener{
 		panel.add(showPiecesGame("Encouraçado", 3, 5, (new Battleship(1, 0))));
 		panel.add(showPiecesGame("Porta-avião", 3, 5, (new Aircraftcarrier(1, 0))));
 		
-		JPanel panelChat = new JPanel();
+		final JPanel panelChat = new JPanel();
 		panelChat.add(scrollpane, BorderLayout.CENTER);
 		panelChat.add(panelTextButton, BorderLayout.SOUTH);
 		panelChat.setBorder(new TitledBorder("Chat"));
 		
-		JPanel mainPanel = new JPanel();
+		final JPanel mainPanel = new JPanel();
 		mainPanel.add(board.paintBoard(), BorderLayout.CENTER);
 		mainPanel.add(boardSecondary, BorderLayout.CENTER);
 		mainPanel.setBorder(new TitledBorder("Jogadores"));
 		
-		JMenu optionMenu = new JMenu("Opções");
+		final JMenu optionMenu = new JMenu("Opções");
 		
 		menuServer = new JMenuItem("Iniciar como servidor");
 		menuServer.addActionListener(this);
@@ -121,8 +122,8 @@ public class WindowBuilder extends JFrame implements ActionListener{
 		menuClient = new JMenuItem("Iniciar como cliente");
 		menuClient.addActionListener(this);
 		
-		menuQuiGame = new JMenuItem("Abandonar jogo");
-		menuQuiGame.addActionListener(this);
+		menuQuitGame = new JMenuItem("Abandonar jogo");
+		menuQuitGame.addActionListener(this);
 		
 		menuRepaint = new JMenuItem("Novo tabuleiro");
 		menuRepaint.addActionListener(this);
@@ -135,12 +136,12 @@ public class WindowBuilder extends JFrame implements ActionListener{
 		
 		optionMenu.add(menuServer);
 		optionMenu.add(menuClient);
-		optionMenu.add(menuQuiGame);
+		optionMenu.add(menuQuitGame);
 		optionMenu.add(menuRepaint);
 		optionMenu.add(menuAbout);
 		optionMenu.add(menuExit);
 
-		JMenuBar menu = new JMenuBar();
+		final JMenuBar menu = new JMenuBar();
 		menu.add(optionMenu);
 		
 		setJMenuBar(menu);
@@ -159,18 +160,18 @@ public class WindowBuilder extends JFrame implements ActionListener{
 		confEnableButtonsMenu(true);
 	}
 	
-	public JPanel showPiecesGame(String title, int rows, int cols, Component component){
-		JPanel panel = new JPanel();
+	public JPanel showPiecesGame(final String title, final int rows, final int cols, final Component component){
+		final JPanel panel = new JPanel();
 		panel.setBorder(new TitledBorder(title));
 		panel.setLayout(new GridLayout(rows, cols));
 		
-		boolean area[][] = new boolean[rows][cols];
+		final boolean area[][] = new boolean[rows][cols];
 		
-		for (Piece piece : component.getPieces()) {
+		for (final Piece piece : component.getPieces()) {
 			area[piece.getPosition().getRow()][piece.getPosition().getColumn()] = true;
 		}
 		
-		Square[][] square = new Square[rows][cols];
+		final Square[][] square = new Square[rows][cols];
 		
 		for (int row = 0; row < square.length; row++) {
 			for (int column = 0; column < square[row].length; column++) {
@@ -187,7 +188,7 @@ public class WindowBuilder extends JFrame implements ActionListener{
 	}
 	
 	@Override
-	public void actionPerformed(ActionEvent event) {
+	public void actionPerformed(final ActionEvent event) {
 		if(event.getSource() == send){
 			if(message.getText().length() > 0){
 				if(event.getSource().equals(send)){
@@ -199,7 +200,7 @@ public class WindowBuilder extends JFrame implements ActionListener{
 			}
 			
 		}else if(event.getSource() == menuAbout){
-			JOptionPane.showMessageDialog(c,
+			JOptionPane.showMessageDialog(container,
 					"BattleShip Game\n\n" +
 					"Autor:        Marcus Pimenta\n" +
 					"email:        mvinicius.pimenta@gmail.com\n" +
@@ -216,15 +217,15 @@ public class WindowBuilder extends JFrame implements ActionListener{
 		}else if(event.getSource() == menuClient){
 			displayAreaMsg.setText("");
 			
-			//JOptionPane.showMessageDialog(null, "Thanks for playing.", "Thanks", 1);
-			
-			host = JOptionPane.showInputDialog(c.getParent(),
+			host = JOptionPane.showInputDialog(container.getParent(),
 											   "Digite o host do servidor:", "Configuração do host do servidor",
 											   JOptionPane.QUESTION_MESSAGE);
 			
 			if(host != null && !host.equals("")){
 				confEnableButtonsMenu(false);
 				actionsCallback.onActionSelected(Action.START_CLIENT);
+			}else if(host.equals("")){
+				displayAreaMsg.setText("Nenhum valor digitado para o host");
 			}
 			
 		}else if(event.getSource() == menuServer){
@@ -233,49 +234,44 @@ public class WindowBuilder extends JFrame implements ActionListener{
 			
 			actionsCallback.onActionSelected(Action.START_SERVER);
 			
-		}else if(event.getSource() == menuQuiGame){
-			confEnableButtonsMenu(true);
-			displayAreaMsg.setText("");
-			
-			reseatBoard();
-			board.repaintBoard();
-			
-			printMsgDisplay("Partida abandonada");
-			actionsCallback.onActionSelected(Action.CLOSE_COMMUNICATION);
+		}else if(event.getSource() == menuQuitGame){
+			quitGame();
 		}
 	}
 	
-	private MouseAdapter mouseAdapter = new MouseAdapter() {
+	private final MouseAdapter mouseAdapter = new MouseAdapter() {
 		
-		public void mouseReleased(MouseEvent e){
-			Square square = (Square)(e.getSource());
-			
-			if(!squareSecondary[square.getRow()][square.getColumn()].isFill()){
-				actionsCallback.onSendCoordinateSquare(square.getRow(), square.getColumn());
-			}else{
-				printMsgDisplay("Você disperdiçou uma jogada");
-			}
+		public void mouseReleased(final MouseEvent e){
+			final Square square = (Square)(e.getSource());
+			actionsCallback.onSendCoordinateSquare(square.getRow(), square.getColumn());
 		}
 		
 	};
 	
-	public void printMsgDisplay(String message){
+	public void quitGame(){
+		confEnableButtonsMenu(true);
+		displayAreaMsg.setText("");
+		
+		reseatBoard();
+		board.repaintBoard();
+		
+		printMsgDisplay("Escolha iniciar como Servidor ou como Cliente");
+		actionsCallback.onActionSelected(Action.CLOSE_COMMUNICATION);
+	}
+	
+	public void printMsgDisplay(final String message){
 		displayAreaMsg.append(message +"\n");
 		displayAreaMsg.setCaretPosition(displayAreaMsg.getDocument().getLength());
 	}
 	
-	public void confEnableButtonsMenu(boolean value){
+	public void confEnableButtonsMenu(final boolean value){
 		menuClient.setEnabled(value);
 		menuServer.setEnabled(value);
 		menuRepaint.setEnabled(value);
-		menuQuiGame.setEnabled(!value);
+		menuQuitGame.setEnabled(!value);
 	}
 	
-	public Board getBoard(){
-		return board;
-	}
-	
-	public void setColorSquare(int x, int y, Color color){
+	public void setColorSquare(final int x, final int y, final Color color){
 		squareSecondary[x][y].setFill(true);
 		squareSecondary[x][y].setSquareColor(color);
 		squareSecondary[x][y].repaint();
@@ -294,10 +290,19 @@ public class WindowBuilder extends JFrame implements ActionListener{
 	public void reseatBoard(){
 		for (int row = 0; row < squareSecondary.length; row++) {
 			for (int column = 0; column < squareSecondary[row].length; column++) {
+				squareSecondary[row][column].setSquareColor(Color.BLACK);
 				squareSecondary[row][column].setFill(false);
 				squareSecondary[row][column].repaint();
 			}
 		}
+	}
+	
+	public Board getBoard(){
+		return board;
+	}
+	
+	public Square[][] getBoardSercondary(){
+		return squareSecondary;
 	}
 	
 }

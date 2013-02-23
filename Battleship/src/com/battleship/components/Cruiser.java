@@ -26,7 +26,7 @@ public class Cruiser extends Component{
 	@Override
 	public void initializePieces() {
 		pieces = new Piece[]{new Piece(position.getRow(), position.getColumn()),
-				 new Piece(position.getRow(), position.getColumn() + 1)};
+				 			 new Piece(position.getRow(), position.getColumn() + 1)};
 	}
 
 	@Override

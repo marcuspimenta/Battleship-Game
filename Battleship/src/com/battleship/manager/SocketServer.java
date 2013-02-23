@@ -12,7 +12,7 @@ import java.net.Socket;
  */
 public class SocketServer {
 
-	private final int TIME_OUT = 15000;
+	private final int TIME_OUT = 20000;
 	
 	private Socket socket;
 	private ServerSocket server;

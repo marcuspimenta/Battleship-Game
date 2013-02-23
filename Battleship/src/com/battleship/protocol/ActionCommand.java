@@ -11,7 +11,9 @@ public enum ActionCommand {
 	START(10),
     MSG_CHAT(20),
 	XY_SQUARE(30),
-	RESPONSE_XY(40);
+	RESPONSE_XY(40),
+	WIN_GAME(50),
+	LOST_PLAY(60);
     
     private int actionCommand;
     

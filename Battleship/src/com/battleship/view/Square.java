@@ -17,9 +17,9 @@ public class Square extends JPanel{
 	
 	private int row;
 	private int column;
-	private Color squareColor;
 	private boolean fill;
 	private boolean show;
+	private Color squareColor;
 	
 	public Square(int row, int column, Color squareColor, boolean fill, boolean show){
 		this.row = row;
@@ -82,11 +82,15 @@ public class Square extends JPanel{
 			if(fill){
 				g.setColor(Color.BLACK);
 				g.drawRect(0, 0, 16, 16);
+				g.setColor(Color.WHITE);
+				g.fillRect(1, 1, 15, 15);
 				g.setColor(squareColor);
 				g.fillRect(2, 2, 13, 13);
 			}else{
 				g.setColor(Color.BLACK);
 				g.drawRect(0, 0, 16, 16);
+				g.setColor(Color.GRAY);
+				g.fillRect(1, 1, 15, 15);
 			}
 		}
 	}

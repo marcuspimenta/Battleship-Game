@@ -64,19 +64,19 @@ public class Board {
 	
 	public void shufflingPieces(){
 		ArrayList<Component> listComponents = new ArrayList<Component>();
+		listComponents.add(new Submarine());
+		listComponents.add(new Submarine());
+		listComponents.add(new Submarine());
+		listComponents.add(new Submarine());
+		listComponents.add(new Seaplane());
+		listComponents.add(new Seaplane());
+		listComponents.add(new Seaplane());
+		listComponents.add(new Cruiser());
+		listComponents.add(new Cruiser());
+		listComponents.add(new Cruiser());
+		listComponents.add(new Battleship());
+		listComponents.add(new Battleship());
 		listComponents.add(new Aircraftcarrier());
-		listComponents.add(new Submarine());
-		listComponents.add(new Submarine());
-		listComponents.add(new Submarine());
-		listComponents.add(new Submarine());
-		listComponents.add(new Seaplane());
-		listComponents.add(new Seaplane());
-		listComponents.add(new Seaplane());
-		listComponents.add(new Cruiser());
-		listComponents.add(new Cruiser());
-		listComponents.add(new Cruiser());
-		listComponents.add(new Battleship());
-		listComponents.add(new Battleship());
 		
 		while(listComponents.size() > 0){
 			int randomIndexList = (new Random()).nextInt(listComponents.size());
@@ -157,6 +157,28 @@ public class Board {
 		return null;
 	}
 	
+	public boolean verifyComponentKill(Component component){
+		for (Piece piece : component.getPieces()) {
+			if(piece.isStatus()){
+				return false;
+			}
+		}
+		
+		return true;
+	}
+	
+	public boolean verifyComponentsSubmerged(){
+		for (Component component : componentes) {
+			for (Piece piece : component.getPieces()) {
+				if(piece.isStatus()){
+					return true;
+				}
+			}
+		}
+		
+		return false;
+	}
+	
 	public boolean getValueSquare(int x, int y){
 		if(x <= area.length && y <= area.length){
 			return area[x][y];
@@ -165,9 +187,24 @@ public class Board {
 		}
 	}
 	
-	public void setValueSquare(int x, int y, boolean value){
-		if(x <= area.length && y <= area.length){
-			area[x][y] = value;
+	public void immersePiece(int row, int column, boolean value){
+		setValueSquare(row, column, value);
+		setStatusValuePieceComponent(row, column, value);
+	}
+	
+	public void setValueSquare(int row, int column, boolean value){
+		if(row <= area.length && column <= area.length){
+			area[row][column] = value;
+		}
+	}
+	
+	public void setStatusValuePieceComponent(int row, int column, boolean value){
+		for (Component component : componentes) {
+			for (Piece piece : component.getPieces()) {
+				if(piece.getPosition().getRow() == row && piece.getPosition().getColumn() == column){
+					piece.setStatus(value);
+				}
+			}
 		}
 	}
 	
