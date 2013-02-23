@@ -61,7 +61,7 @@ public class BusinessLogic {
 		@Override
 		public void onSendCoordinateSquare(int row, int column) {
 			
-			if(moves_sent < NUMBER_MOVES && responses_receiver == 0){
+			if(moves_sent < NUMBER_MOVES && responses_receiver == 0 && communication != null){
 				if(!windowBuilder.getBoardSercondary()[row][column].isFill()){
 					sendCommand(command.formCommand(ActionCommand.XY_SQUARE.getActionCommand(), new byte[]{(byte)row, (byte)column}));			
 				}else{

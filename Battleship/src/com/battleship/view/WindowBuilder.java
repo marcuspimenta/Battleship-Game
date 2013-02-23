@@ -2,7 +2,6 @@ package com.battleship.view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Container;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -44,7 +43,6 @@ public class WindowBuilder extends JFrame implements ActionListener{
 
 	public static String host;
 	
-	private Container container;
 	private Square[][] squareSecondary;
 	
 	private Board board;
@@ -62,8 +60,6 @@ public class WindowBuilder extends JFrame implements ActionListener{
 	}
 	
 	public void printTabuleiro(){
-		
-		container = getContentPane();
 		
 		board = new Board();
 		
@@ -158,6 +154,7 @@ public class WindowBuilder extends JFrame implements ActionListener{
 		setVisible(true);
 		
 		confEnableButtonsMenu(true);
+		printMsgDisplay("Escolha iniciar como Servidor ou como Cliente");
 	}
 	
 	public JPanel showPiecesGame(final String title, final int rows, final int cols, final Component component){
@@ -200,12 +197,12 @@ public class WindowBuilder extends JFrame implements ActionListener{
 			}
 			
 		}else if(event.getSource() == menuAbout){
-			JOptionPane.showMessageDialog(container,
-					"BattleShip Game\n\n" +
-					"Autor:        Marcus Pimenta\n" +
-					"email:        mvinicius.pimenta@gmail.com\n" +
-					"Data: 		         jan 31, 2013",
-					"Sobre BattleShip", JOptionPane.PLAIN_MESSAGE);
+			JOptionPane.showMessageDialog(getContentPane(),
+										  "BattleShip Game\n\n" +
+										  "Autor:        Marcus Pimenta\n" +
+										  "email:        mvinicius.pimenta@gmail.com\n" +
+										  "Data: 		         jan 31, 2013",
+										  "Sobre BattleShip", JOptionPane.PLAIN_MESSAGE);
 			
 		}else if(event.getSource() == menuExit){
 			actionsCallback.onActionSelected(Action.CLOSE_COMMUNICATION);
@@ -217,7 +214,7 @@ public class WindowBuilder extends JFrame implements ActionListener{
 		}else if(event.getSource() == menuClient){
 			displayAreaMsg.setText("");
 			
-			host = JOptionPane.showInputDialog(container.getParent(),
+			host = JOptionPane.showInputDialog(getContentPane().getParent(),
 											   "Digite o host do servidor:", "Configuração do host do servidor",
 											   JOptionPane.QUESTION_MESSAGE);
 			
