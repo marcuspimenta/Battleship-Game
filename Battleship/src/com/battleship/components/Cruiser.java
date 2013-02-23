@@ -20,7 +20,7 @@ public class Cruiser extends Component{
 	
 	@Override
 	public String getName() {
-		return "Cruzador";
+		return "Cruiser";
 	}
 	
 	@Override

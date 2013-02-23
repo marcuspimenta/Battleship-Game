@@ -64,7 +64,7 @@ public class WindowBuilder extends JFrame implements ActionListener{
 		board = new Board();
 		
 		boardSecondary = new JPanel();
-		boardSecondary.setBorder(new TitledBorder("Jogo do Adversário"));
+		boardSecondary.setBorder(new TitledBorder("Opponent's game"));
 		boardSecondary.setLayout(new GridLayout(15, 15, 0, 0));
 		
 		squareSecondary = new Square[15][15];
@@ -83,22 +83,26 @@ public class WindowBuilder extends JFrame implements ActionListener{
 		message.getDocument().putProperty("filterNewlines", Boolean.TRUE);
 		message.setEditable(true);
 		
-		send = new JButton("Enviar");
+		send = new JButton("Send");
 		send.addActionListener(this);
+		
+		JPanel jPanel = new JPanel();
+		jPanel.setSize(1, 1);  
 		
 		final JPanel panelTextButton = new JPanel();
 		panelTextButton.setLayout(new BorderLayout());
 		panelTextButton.add(message, BorderLayout.WEST);
+		panelTextButton.add(jPanel, BorderLayout.CENTER);
 		panelTextButton.add(send, BorderLayout.EAST);
 		
 		final JPanel panel = new JPanel();
-		panel.setBorder(new TitledBorder("Armas"));
+		panel.setBorder(new TitledBorder("Arms"));
 		panel.setLayout(new GridLayout(3, 2));
-		panel.add(showPiecesGame("Hidroavião", 3, 5, (new Seaplane(1, 1))));
-		panel.add(showPiecesGame("Submarino", 3, 5, (new Submarine(1, 2))));
-		panel.add(showPiecesGame("Cruzador", 3, 5, (new Cruiser(1, 1))));
-		panel.add(showPiecesGame("Encouraçado", 3, 5, (new Battleship(1, 0))));
-		panel.add(showPiecesGame("Porta-avião", 3, 5, (new Aircraftcarrier(1, 0))));
+		panel.add(showPiecesGame("Seaplane", 3, 5, (new Seaplane(1, 1))));
+		panel.add(showPiecesGame("Submarine", 3, 5, (new Submarine(1, 2))));
+		panel.add(showPiecesGame("Cruiser", 3, 5, (new Cruiser(1, 1))));
+		panel.add(showPiecesGame("Battleship", 3, 5, (new Battleship(1, 0))));
+		panel.add(showPiecesGame("Aircraft carrier", 3, 5, (new Aircraftcarrier(1, 0))));
 		
 		final JPanel panelChat = new JPanel();
 		panelChat.add(scrollpane, BorderLayout.CENTER);
@@ -108,26 +112,26 @@ public class WindowBuilder extends JFrame implements ActionListener{
 		final JPanel mainPanel = new JPanel();
 		mainPanel.add(board.paintBoard(), BorderLayout.CENTER);
 		mainPanel.add(boardSecondary, BorderLayout.CENTER);
-		mainPanel.setBorder(new TitledBorder("Jogadores"));
+		mainPanel.setBorder(new TitledBorder("Players"));
 		
-		final JMenu optionMenu = new JMenu("Opções");
+		final JMenu optionMenu = new JMenu("Options");
 		
-		menuServer = new JMenuItem("Iniciar como servidor");
+		menuServer = new JMenuItem("Start server");
 		menuServer.addActionListener(this);
 		
-		menuClient = new JMenuItem("Iniciar como cliente");
+		menuClient = new JMenuItem("Start client");
 		menuClient.addActionListener(this);
 		
-		menuQuitGame = new JMenuItem("Abandonar jogo");
+		menuQuitGame = new JMenuItem("Abandoning game");
 		menuQuitGame.addActionListener(this);
 		
-		menuRepaint = new JMenuItem("Novo tabuleiro");
+		menuRepaint = new JMenuItem("New board");
 		menuRepaint.addActionListener(this);
 		
-		menuAbout = new JMenuItem("Sobre");
+		menuAbout = new JMenuItem("About");
 		menuAbout.addActionListener(this);
 		
-		menuExit = new JMenuItem("Sair");
+		menuExit = new JMenuItem("Exit");
 		menuExit.addActionListener(this);
 		
 		optionMenu.add(menuServer);
@@ -154,7 +158,7 @@ public class WindowBuilder extends JFrame implements ActionListener{
 		setVisible(true);
 		
 		confEnableButtonsMenu(true);
-		printMsgDisplay("Escolha iniciar como Servidor ou como Cliente");
+		printMsgDisplay("Choose start as server or client");
 	}
 	
 	public JPanel showPiecesGame(final String title, final int rows, final int cols, final Component component){
@@ -189,7 +193,7 @@ public class WindowBuilder extends JFrame implements ActionListener{
 		if(event.getSource() == send){
 			if(message.getText().length() > 0){
 				if(event.getSource().equals(send)){
-					printMsgDisplay("Você: " + message.getText());
+					printMsgDisplay("You: " + message.getText());
 		   			actionsCallback.onSendMessageChat(message.getText());
 
 		   			message.setText("");
@@ -215,14 +219,14 @@ public class WindowBuilder extends JFrame implements ActionListener{
 			displayAreaMsg.setText("");
 			
 			host = JOptionPane.showInputDialog(getContentPane().getParent(),
-											   "Digite o host do servidor:", "Configuração do host do servidor",
+											   "Enter the server host:", "Configuration server host",
 											   JOptionPane.QUESTION_MESSAGE);
 			
 			if(host != null && !host.equals("")){
 				confEnableButtonsMenu(false);
 				actionsCallback.onActionSelected(Action.START_CLIENT);
 			}else if(host.equals("")){
-				displayAreaMsg.setText("Nenhum valor digitado para o host");
+				displayAreaMsg.setText("No value entered for the host");
 			}
 			
 		}else if(event.getSource() == menuServer){
@@ -252,7 +256,7 @@ public class WindowBuilder extends JFrame implements ActionListener{
 		reseatBoard();
 		board.repaintBoard();
 		
-		printMsgDisplay("Escolha iniciar como Servidor ou como Cliente");
+		printMsgDisplay("Choose start as server or client");
 		actionsCallback.onActionSelected(Action.CLOSE_COMMUNICATION);
 	}
 	

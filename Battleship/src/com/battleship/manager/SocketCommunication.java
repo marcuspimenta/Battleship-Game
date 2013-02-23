@@ -36,7 +36,7 @@ public class SocketCommunication extends Thread {
 			 dataInputStream = new DataInputStream(socket.getInputStream());
 			 dataOutputStream = new DataOutputStream(socket.getOutputStream());
 			
-			 socketCallback.onPrintMsgConsole("Conexao realizada com sucesso");
+			 socketCallback.onPrintMsgConsole("Connected successfully");
 			 
 			 while (run) {
 				 if(dataInputStream.available() > 0){
@@ -59,14 +59,14 @@ public class SocketCommunication extends Thread {
 				dataOutputStream.write(command);
 				dataOutputStream.flush();
 			}else{
-				socketCallback.onPrintMsgConsole("Sem conexao");
+				socketCallback.onPrintMsgConsole("No connection");
 			}
 			
 		} catch (IOException e) {
 			e.printStackTrace(); 
 			
 			stopComunication();
-			socketCallback.onPrintMsgConsole("Conexão perdida. Inicie uma nova partida\n");
+			socketCallback.onPrintMsgConsole("Connection lost. Start a new game\n");
 		}
 	}
 	

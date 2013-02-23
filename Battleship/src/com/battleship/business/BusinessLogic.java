@@ -23,6 +23,7 @@ import com.battleship.view.WindowBuilder;
 public class BusinessLogic {
 
 	private final int PORT = 98;
+	private final int TIMER_OUT = 30;
 	
 	private int moves_sent = 0;
 	private int responses_receiver = 0;
@@ -65,7 +66,7 @@ public class BusinessLogic {
 				if(!windowBuilder.getBoardSercondary()[row][column].isFill()){
 					sendCommand(command.formCommand(ActionCommand.XY_SQUARE.getActionCommand(), new byte[]{(byte)row, (byte)column}));			
 				}else{
-					windowBuilder.printMsgDisplay("Você disperdiçou uma jogada");
+					windowBuilder.printMsgDisplay("You wasted a move");
 					sendCommand(command.formCommand(ActionCommand.LOST_PLAY.getActionCommand(), new byte[]{0}));	
 				}
 				
@@ -94,7 +95,7 @@ public class BusinessLogic {
 			byte[] content = command.getContentCommand(msgReceiver);
 			
 			if(content != null){
-				windowBuilder.printMsgDisplay("Adversário: " + new String(content));
+				windowBuilder.printMsgDisplay("Opponent: " + new String(content));
 			}
 			
 		}else if(actionCommand == ActionCommand.XY_SQUARE.getActionCommand()){
@@ -110,13 +111,13 @@ public class BusinessLogic {
 				
 				if(windowBuilder.getBoard().verifyComponentsSubmerged()){
 					if(windowBuilder.getBoard().verifyComponentKill(component)){
-						sendCommand(command.formCommand(ActionCommand.RESPONSE_XY.getActionCommand(), new byte[]{1, content[0], content[1]}, ("Você afundou :" + component.getName()).getBytes()));
+						sendCommand(command.formCommand(ActionCommand.RESPONSE_XY.getActionCommand(), new byte[]{1, content[0], content[1]}, ("You sank :" + component.getName()).getBytes()));
 					}else{
-						sendCommand(command.formCommand(ActionCommand.RESPONSE_XY.getActionCommand(), new byte[]{1, content[0], content[1]}, ("Você acertou :" + component.getName()).getBytes()));
+						sendCommand(command.formCommand(ActionCommand.RESPONSE_XY.getActionCommand(), new byte[]{1, content[0], content[1]}, ("You hit :" + component.getName()).getBytes()));
 					}
 				}else{
 					sendCommand(command.formCommand(ActionCommand.WIN_GAME.getActionCommand(), new byte[]{0}));
-					JOptionPane.showMessageDialog(windowBuilder.getContentPane(), "Você perdeu a partida. Procure um novo adversário.", "OK", 1);
+					JOptionPane.showMessageDialog(windowBuilder.getContentPane(), "You lost the game. Search a new opponent.", "OK", 1);
 					windowBuilder.quitGame();
 				}
 				
@@ -136,17 +137,17 @@ public class BusinessLogic {
 			}
 			
 			if(moves_sent == NUMBER_MOVES){
-				windowBuilder.printMsgDisplay("Agora quem joga é o adversário");
+				windowBuilder.printMsgDisplay("Now who is the opponent plays");
 			}
 			
 		}else if(actionCommand == ActionCommand.WIN_GAME.getActionCommand()){
-			JOptionPane.showMessageDialog(windowBuilder.getContentPane(), "Parabéns!!! Você ganhou a partida. Procure um novo adversário.", "OK", 1);
+			JOptionPane.showMessageDialog(windowBuilder.getContentPane(), "Congratulations! You won the game. Search a new opponent.", "OK", 1);
 			windowBuilder.quitGame();
 			
 		}else if(actionCommand == ActionCommand.LOST_PLAY.getActionCommand()){
 			increaseResponsePlay();
 		}else{
-			windowBuilder.printMsgDisplay("Mensagem inválida");
+			windowBuilder.printMsgDisplay("Invalid message");
 		}
 	}
 	
@@ -154,7 +155,7 @@ public class BusinessLogic {
 		responses_receiver++;
 		
 		if(responses_receiver == NUMBER_RESPONSES){
-			windowBuilder.printMsgDisplay("Sua vez de jogar");
+			windowBuilder.printMsgDisplay("Your turn to play");
 			moves_sent = 0;
 			responses_receiver = 0;
 		}
@@ -164,7 +165,7 @@ public class BusinessLogic {
 		if(communication != null){
 			communication.sendMsg(command);
 		}else{
-			windowBuilder.printMsgDisplay("Sem conexão");
+			windowBuilder.printMsgDisplay("No connection");
 		}
 	}
 	
@@ -190,7 +191,7 @@ public class BusinessLogic {
 	private void startServer(){
 		closeCommunication();
 		
-		windowBuilder.printMsgDisplay("Servidor aberto\nAguardando conexao por 20 segundos...\n");
+		windowBuilder.printMsgDisplay("Open server\nWaiting for connection for " + TIMER_OUT + " seconds...\n");
 
 		new Thread(){
 			@Override
@@ -198,13 +199,13 @@ public class BusinessLogic {
 				super.run();
 				
 				server = new SocketServer();
-				Socket socket = server.startServer(PORT);
+				Socket socket = server.startServer(PORT, TIMER_OUT);
 				
 				if(socket != null){
 					configCommunication(socket);
 				}else{
 					windowBuilder.confEnableButtonsMenu(true);
-					windowBuilder.printMsgDisplay("Tempo de espera por conexão ultrapassado\nTente novamente\n");
+					windowBuilder.printMsgDisplay("Timeout for connection exceeded\nTry again\n");
 				}
 			}
 		}.start();
@@ -212,7 +213,7 @@ public class BusinessLogic {
 	
 	private void startClient(){
 		closeCommunication();
-		windowBuilder.printMsgDisplay("Cliente iniciado...\n");
+		windowBuilder.printMsgDisplay("Client initiated...\n");
 		
 		new Thread(){
 			@Override
@@ -226,7 +227,7 @@ public class BusinessLogic {
 					configCommunication(socket);
 				}else{
 					windowBuilder.confEnableButtonsMenu(true);
-					windowBuilder.printMsgDisplay("Erro ao tenta se conectar com o servidor\nVerifique se o host digitado está correto");
+					windowBuilder.printMsgDisplay("Error when trying to connect to the server\nVerify the host is correct");
 				}
 			}
 		}.start();

@@ -31,7 +31,7 @@ public class Board {
 	
 	public JPanel paintBoard(){
 		JPanel board = new JPanel();
-		board.setBorder(new TitledBorder("Seu jogo"));
+		board.setBorder(new TitledBorder("Your game"));
 		board.setLayout(new GridLayout(15, 15, 0, 0));
 		
 		resetBoard();

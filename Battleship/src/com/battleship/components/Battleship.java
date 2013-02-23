@@ -20,7 +20,7 @@ public class Battleship extends Component{
 	
 	@Override
 	public String getName() {
-		return "Encouraçado";
+		return "Battleship";
 	}
 
 	@Override

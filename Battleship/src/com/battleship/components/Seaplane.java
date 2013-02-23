@@ -20,7 +20,7 @@ public class Seaplane extends Component{
 	
 	@Override
 	public String getName() {
-		return "Hiodroavião";
+		return "Seaplane";
 	}
 	
 	@Override

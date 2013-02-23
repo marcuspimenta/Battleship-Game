@@ -12,15 +12,13 @@ import java.net.Socket;
  */
 public class SocketServer {
 
-	private final int TIME_OUT = 20000;
-	
 	private Socket socket;
 	private ServerSocket server;
 	
-	public Socket startServer(int port){
+	public Socket startServer(int port, int timerout){
 		try {
 			server = new ServerSocket(port);
-			server.setSoTimeout(TIME_OUT);
+			server.setSoTimeout(timerout*1000);
 			
 			socket = server.accept();
 			

@@ -20,7 +20,7 @@ public class Aircraftcarrier extends Component{
 	
 	@Override
 	public String getName() {
-		return "Porta-aviões";
+		return "Aircraft carrier";
 	}
 	
 	@Override
