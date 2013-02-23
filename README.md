@@ -3,7 +3,7 @@ Battleship Game
 <p align="center"> <img src="imagens/battleship_window.png"/> </p>
 
 ##About
-Implement the Battleships Game using sockets as communication. One of the users is the server connection and the other the client.
+Implement the Battleship Game using sockets as communication. One of the users is the server connection and the other the client.
 Users can also exchange messages through a chat.
 
 ##Start the game

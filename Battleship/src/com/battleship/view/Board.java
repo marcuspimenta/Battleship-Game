@@ -51,15 +51,9 @@ public class Board {
 	
 	public void repaintBoard(){
 		resetBoard();
-		resetSquares();
+		resetSquaresBoard();
 		shufflingPieces();
-		
-		for (int row = 0; row < square.length; row++) {
-			for (int column = 0; column < square[row].length; column++) {
-				square[row][column].setFill(area[row][column]);
-				square[row][column].repaint();
-			}
-		}
+		repainSquaresBoard();
 	}
 	
 	public void shufflingPieces(){
@@ -85,12 +79,11 @@ public class Board {
 			
 			if(verifyAreaComponentSupport(listComponents.get(randomIndexList), randomRow, randomColumn) && !verifyComponentArea(listComponents.get(randomIndexList), randomRow, randomColumn)){
 				Component component = listComponents.get(randomIndexList);
-				component.getPosition().setRow(randomRow);
-				component.getPosition().setColumn(randomColumn);
+				component.getPosition().setCoordinatePosition(randomRow, randomColumn);
 				component.updatePositonPieces();
 				
 				componentes.add(component);
-				putComponent(component);
+				putComponentInBoard(component);
 				
 				listComponents.remove(randomIndexList);
 			}
@@ -115,7 +108,7 @@ public class Board {
 		return false;
 	}
 
-	public void putComponent(Component component){
+	public void putComponentInBoard(Component component){
 		for (Piece piece : component.getPieces()) {
 			area[piece.getPosition().getRow()][piece.getPosition().getColumn()] = true;
 		}
@@ -129,11 +122,20 @@ public class Board {
 		}
 	}
 	
-	public void resetSquares(){
+	public void resetSquaresBoard(){
 		for (int row = 0; row < square.length; row++) {
 			for (int column = 0; column < square[row].length; column++) {
 				square[row][column].setSquareColor(Color.BLACK);
 				square[row][column].setFill(false);
+				square[row][column].repaint();
+			}
+		}
+	}
+	
+	public void repainSquaresBoard(){
+		for (int row = 0; row < square.length; row++) {
+			for (int column = 0; column < square[row].length; column++) {
+				square[row][column].setFill(area[row][column]);
 				square[row][column].repaint();
 			}
 		}

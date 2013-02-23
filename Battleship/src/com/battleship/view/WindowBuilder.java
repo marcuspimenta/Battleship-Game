@@ -37,7 +37,6 @@ import com.battleship.components.Submarine;
  * @email mvinicius.pimenta@gmail.com
  * @date 16:48:34 30/01/2013
  */
-
 @SuppressWarnings("serial")
 public class WindowBuilder extends JFrame implements ActionListener{
 
@@ -98,11 +97,11 @@ public class WindowBuilder extends JFrame implements ActionListener{
 		final JPanel panel = new JPanel();
 		panel.setBorder(new TitledBorder("Arms"));
 		panel.setLayout(new GridLayout(3, 2));
-		panel.add(showPiecesGame("Seaplane", 3, 5, (new Seaplane(1, 1))));
-		panel.add(showPiecesGame("Submarine", 3, 5, (new Submarine(1, 2))));
-		panel.add(showPiecesGame("Cruiser", 3, 5, (new Cruiser(1, 1))));
-		panel.add(showPiecesGame("Battleship", 3, 5, (new Battleship(1, 0))));
-		panel.add(showPiecesGame("Aircraft carrier", 3, 5, (new Aircraftcarrier(1, 0))));
+		panel.add(showPiecesGame(new Seaplane(1, 1)));
+		panel.add(showPiecesGame(new Submarine(1, 2)));
+		panel.add(showPiecesGame(new Cruiser(1, 1)));
+		panel.add(showPiecesGame(new Battleship(1, 0)));
+		panel.add(showPiecesGame(new Aircraftcarrier(1, 0)));
 		
 		final JPanel panelChat = new JPanel();
 		panelChat.add(scrollpane, BorderLayout.CENTER);
@@ -161,9 +160,12 @@ public class WindowBuilder extends JFrame implements ActionListener{
 		printMsgDisplay("Choose start as server or client");
 	}
 	
-	public JPanel showPiecesGame(final String title, final int rows, final int cols, final Component component){
+	public JPanel showPiecesGame(final Component component){
+		int rows = 3;
+		int cols = 5;
+		
 		final JPanel panel = new JPanel();
-		panel.setBorder(new TitledBorder(title));
+		panel.setBorder(new TitledBorder(component.getName()));
 		panel.setLayout(new GridLayout(rows, cols));
 		
 		final boolean area[][] = new boolean[rows][cols];
