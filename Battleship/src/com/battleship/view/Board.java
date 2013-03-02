@@ -50,6 +50,7 @@ public class Board {
 	}
 	
 	public void repaintBoard(){
+		componentes.clear();
 		resetBoard();
 		resetSquaresBoard();
 		shufflingPieces();
